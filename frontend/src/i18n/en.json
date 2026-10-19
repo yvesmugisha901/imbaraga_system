@@ -1,0 +1,24 @@
+{
+  "app": { "name": "Imbaraga", "tagline": "Seeing poverty before the next survey" },
+  "nav": { "dashboard": "Dashboard", "targeting": "Targeting", "insights": "Insights" },
+  "lang": { "label": "Language" },
+  "dashboard": {
+    "title": "National overview",
+    "kpi": {
+      "poverty": "Poverty rate",
+      "exclusion": "Financial exclusion",
+      "highRisk": "High-risk districts",
+      "scored": "Households scored"
+    },
+    "districts": "Districts",
+    "pending": "Pending",
+    "noData": "No districts found.",
+    "loading": "Loading…",
+    "retry": "Try again",
+    "error": "Could not load data",
+    "source": { "province_eicv7": "Province rate (EICV7)", "microdata": "EICV7 microdata", "modelled": "Modelled estimate" }
+  },
+  "table": { "district": "District", "province": "Province", "population": "Population", "poverty": "Poverty rate (%)", "source": "Source" },
+  "placeholder": { "soon": "Coming soon" },
+  "notice": { "decisionSupport": "Decision-support only. A human makes the final decision." }
+}

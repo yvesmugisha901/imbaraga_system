@@ -1,0 +1,24 @@
+{
+  "app": { "name": "Imbaraga", "tagline": "Kubona ubukene mbere y'ubushakashatsi bukurikira" },
+  "nav": { "dashboard": "Ahabanza", "targeting": "Guhitamo ingo", "insights": "Ubusesenguzi" },
+  "lang": { "label": "Ururimi" },
+  "dashboard": {
+    "title": "Incamake y'igihugu",
+    "kpi": {
+      "poverty": "Igipimo cy'ubukene",
+      "exclusion": "Abatagera kuri serivisi z'imari",
+      "highRisk": "Uturere dufite ibyago byinshi",
+      "scored": "Ingo zasuzumwe"
+    },
+    "districts": "Uturere",
+    "pending": "Bitaraboneka",
+    "noData": "Nta turere twabonetse.",
+    "loading": "Biraje…",
+    "retry": "Ongera ugerageze",
+    "error": "Ntibishobotse kubona amakuru",
+    "source": { "province_eicv7": "Igipimo cy'intara (EICV7)", "microdata": "Amakuru ya EICV7", "modelled": "Igereranya" }
+  },
+  "table": { "district": "Akarere", "province": "Intara", "population": "Abaturage", "poverty": "Igipimo cy'ubukene (%)", "source": "Inkomoko" },
+  "placeholder": { "soon": "Biraza vuba" },
+  "notice": { "decisionSupport": "Ifasha gufata ibyemezo gusa. Umuntu ni we ufata icyemezo cya nyuma." }
+}
