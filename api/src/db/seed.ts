@@ -2,18 +2,15 @@ import Database from 'better-sqlite3';
 import { parse } from 'csv-parse/sync';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 
-const here = path.dirname(fileURLToPath(import.meta.url));
-
-const root = path.resolve(here, '../../..');           // repo root
+const root = path.resolve(__dirname, '../../..');           // repo root
 const dbPath = process.env.DATABASE_URL ?? path.join(root, 'imbaraga.db');
 const csvPath = path.join(root, 'data/processed/district_aggregates.csv');
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, '-');
 
 const db = new Database(dbPath);
-db.exec(fs.readFileSync(path.join(here, 'schema.sql'), 'utf8'));
+db.exec(fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8'));
 
 const rows = parse(fs.readFileSync(csvPath, 'utf8'), { columns: true, skip_empty_lines: true }) as Record<string, string>[];
 
