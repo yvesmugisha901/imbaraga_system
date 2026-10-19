@@ -1,0 +1,138 @@
+{
+  "_note": "EICV7 (2023/24) calibration targets for synthetic data. Unit: individuals or households as stated in source table. NATIONAL/PROVINCE level only; no district-level values exist in these tables.",
+  "poverty_line_rwf_per_adult_equiv_per_year": 560127,
+  "extreme_poverty_line_rwf": 356432,
+  "national_poverty_2024": 27.4,
+  "national_poverty_2017_modelled": 39.8,
+  "extreme_poverty_2024": 5.4,
+  "province_poverty_2024": {
+    "Kigali City": 9.1,
+    "South": 34.7,
+    "West": 37.4,
+    "North": 20.2,
+    "East": 26.8
+  },
+  "urban_poverty_2024": 16.7,
+  "rural_poverty_2024": 31.6,
+  "head_sex_poverty_rate": {
+    "male": 23.3,
+    "female": 23.5,
+    "source": "Table 6.1"
+  },
+  "head_age_poverty_rate": {
+    "17-25": 16.6,
+    "26-35": 17.6,
+    "36-45": 27.5,
+    "46-55": 28.2,
+    "56-65": 24.8,
+    "66+": 21.2,
+    "source": "Table 6.1"
+  },
+  "head_education_poverty_rate": {
+    "none_or_below_primary": 30.9,
+    "primary": 17.8,
+    "lower_secondary": 9.0,
+    "upper_secondary": 3.3,
+    "university": 0.0,
+    "source": "Table 6.3"
+  },
+  "head_education_share_of_poor": {
+    "none_or_below_primary": 78.2,
+    "primary": 19.3,
+    "lower_secondary": 1.6,
+    "upper_secondary": 0.9,
+    "university": 0.0
+  },
+  "head_education_share_of_nonpoor": {
+    "none_or_below_primary": 53.4,
+    "primary": 27.1,
+    "lower_secondary": 4.9,
+    "upper_secondary": 8.0,
+    "university": 6.6
+  },
+  "main_income_by_poverty_status_pct_hh": {
+    "source": "Table 6.9",
+    "poor": {
+      "farm_wages": 32.5,
+      "non_farm_wages": 18.9,
+      "independent_farmer": 41.0,
+      "independent_non_farmer": 7.0,
+      "other": 0.6
+    },
+    "non_poor": {
+      "farm_wages": 11.8,
+      "non_farm_wages": 30.1,
+      "independent_farmer": 41.2,
+      "independent_non_farmer": 16.3,
+      "other": 0.7
+    }
+  },
+  "financial_access_by_poverty_status_pct_hh": {
+    "source": "Table 6.9 memo items",
+    "savings_account": {
+      "poor": 53.2,
+      "non_poor": 74.4,
+      "all": 68.0
+    },
+    "mobile_money_account": {
+      "poor": 77.8,
+      "non_poor": 90.3,
+      "all": 86.6
+    }
+  },
+  "housing_assets_by_poverty_status_pct_hh": {
+    "source": "Tables 6.7, 6.8",
+    "electricity": {
+      "poor": 55.2,
+      "non_poor": 77.1
+    },
+    "improved_sanitation": {
+      "poor": 89.4,
+      "non_poor": 95.9
+    },
+    "improved_water": {
+      "poor": 85.0,
+      "non_poor": 91.1
+    },
+    "corrugated_iron_roof": {
+      "poor": 66.6,
+      "non_poor": 78.6
+    },
+    "modern_floor": {
+      "poor": 14.5,
+      "non_poor": 46.8
+    },
+    "owner_occupied": {
+      "poor": 78.9,
+      "non_poor": 70.4
+    },
+    "own_tv": {
+      "poor": 3.6,
+      "non_poor": 27.5
+    },
+    "own_radio": {
+      "poor": 42.7,
+      "non_poor": 67.8
+    },
+    "own_bicycle": {
+      "poor": 11.6,
+      "non_poor": 22.1
+    }
+  },
+  "shocks_pct_hh": {
+    "source": "Table 6.10",
+    "any_severe_shock": {
+      "poor": 41.0,
+      "non_poor": 35.6,
+      "all": 37.1
+    },
+    "main_shock_all": {
+      "environmental": 30.6,
+      "health": 27.0,
+      "high_food_price": 21.5,
+      "income_loss_employment": 8.5,
+      "farm_related": 4.2,
+      "other": 8.2
+    }
+  }
+}
