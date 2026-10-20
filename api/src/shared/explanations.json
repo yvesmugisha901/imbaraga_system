@@ -1,0 +1,108 @@
+{
+  "_note": "Bilingual driver sentences for SHAP explanations. Shared by the API and ML service. Kinyarwanda is a DRAFT: the first three entries and has_mobile_money follow the project plan (section 9.4); all others are unreviewed. A native speaker must review every rw string before the demo (plan Day 10, risk R7).",
+  "needs_native_review": true,
+  "version": "0.1",
+  "features": {
+    "has_mobile_money": {
+      "showAsDriver": true,
+      "label": { "en": "Mobile money account", "rw": "Konti ya mobile money" },
+      "raises": { "en": "No mobile money account limits access to savings and transfers", "rw": "Nta konti ya mobile money ifite bituma kubona ubwizigame n'inkunga bigorana" },
+      "lowers": { "en": "Has a mobile money account", "rw": "Ifite konti ya mobile money" }
+    },
+    "dependency_ratio": {
+      "showAsDriver": true,
+      "label": { "en": "Dependents per working adult", "rw": "Abatunzwe ku mukozi umwe" },
+      "raises": { "en": "Many dependents per working adult", "rw": "Abatunzwe ni benshi ugereranyije n'abakora" },
+      "lowers": { "en": "Few dependents per working adult", "rw": "Abatunzwe ni bake ugereranyije n'abakora" }
+    },
+    "land_size_ha": {
+      "showAsDriver": true,
+      "label": { "en": "Land size (ha)", "rw": "Ubuso bw'ubutaka (ha)" },
+      "raises": { "en": "Very small land holding", "rw": "Ubutaka buto cyane" },
+      "lowers": { "en": "Has a larger land holding", "rw": "Afite ubutaka bunini" }
+    },
+    "income_sources_count": {
+      "showAsDriver": true,
+      "label": { "en": "Number of income sources", "rw": "Umubare w'inkomoko z'amafaranga" },
+      "raises": { "en": "Relies on only one source of income", "rw": "Yishingikiriza isoko imwe y'amafaranga gusa" },
+      "lowers": { "en": "Has several sources of income", "rw": "Afite inkomoko nyinshi z'amafaranga" }
+    },
+    "household_size": {
+      "showAsDriver": true,
+      "label": { "en": "Household size", "rw": "Abagize urugo" },
+      "raises": { "en": "Large household to support", "rw": "Urugo rugizwe n'abantu benshi" },
+      "lowers": { "en": "Small household", "rw": "Urugo rugizwe n'abantu bake" }
+    },
+    "head_education_level": {
+      "showAsDriver": true,
+      "label": { "en": "Education of household head", "rw": "Amashuri umukuru w'urugo yize" },
+      "raises": { "en": "Household head has little or no formal education", "rw": "Umukuru w'urugo afite amashuri make cyangwa nta yo yize" },
+      "lowers": { "en": "Household head has secondary or higher education", "rw": "Umukuru w'urugo yize amashuri yisumbuye cyangwa kaminuza" }
+    },
+    "ubudehe_category": {
+      "showAsDriver": true,
+      "label": { "en": "Ubudehe category", "rw": "Icyiciro cy'ubudehe" },
+      "raises": { "en": "Low Ubudehe category", "rw": "Icyiciro cy'ubudehe kiri hasi" },
+      "lowers": { "en": "Higher Ubudehe category", "rw": "Icyiciro cy'ubudehe kiri hejuru" }
+    },
+    "main_income_source": {
+      "showAsDriver": true,
+      "label": { "en": "Main income source", "rw": "Inkomoko nyamukuru y'amafaranga" },
+      "raises": { "en": "Main income comes from wage work on other people's farms", "rw": "Amafaranga y'ingenzi aturuka ku gukorera abandi mu buhinzi" },
+      "lowers": { "en": "Main income comes from non-farm work or a business", "rw": "Amafaranga y'ingenzi aturuka ku murimo utari uw'ubuhinzi cyangwa ubucuruzi" }
+    },
+    "asset_index": {
+      "showAsDriver": true,
+      "label": { "en": "Household assets", "rw": "Umutungo w'urugo" },
+      "raises": { "en": "Few household assets", "rw": "Umutungo w'urugo ni muto" },
+      "lowers": { "en": "Owns several household assets", "rw": "Atunze ibikoresho byinshi mu rugo" }
+    },
+    "has_electricity": {
+      "showAsDriver": true,
+      "label": { "en": "Electricity", "rw": "Amashanyarazi" },
+      "raises": { "en": "No electricity at home", "rw": "Nta mashanyarazi mu rugo" },
+      "lowers": { "en": "Home has electricity", "rw": "Urugo rufite amashanyarazi" }
+    },
+    "improved_water": {
+      "showAsDriver": true,
+      "label": { "en": "Drinking water", "rw": "Amazi yo kunywa" },
+      "raises": { "en": "No improved source of drinking water", "rw": "Nta mazi meza yo kunywa" },
+      "lowers": { "en": "Has an improved source of drinking water", "rw": "Ifite amazi meza yo kunywa" }
+    },
+    "has_savings": {
+      "showAsDriver": true,
+      "label": { "en": "Savings account", "rw": "Konti y'ubwizigame" },
+      "raises": { "en": "No savings account", "rw": "Nta konti y'ubwizigame" },
+      "lowers": { "en": "Has a savings account", "rw": "Ifite konti y'ubwizigame" }
+    },
+    "has_credit": {
+      "showAsDriver": true,
+      "label": { "en": "Access to credit", "rw": "Kubona inguzanyo" },
+      "raises": { "en": "No loan or credit access", "rw": "Nta nguzanyo yabonye" },
+      "lowers": { "en": "Has access to credit", "rw": "Afite uburyo bwo kubona inguzanyo" }
+    },
+    "head_age": {
+      "showAsDriver": true,
+      "label": { "en": "Age of household head", "rw": "Imyaka y'umukuru w'urugo" },
+      "raises": { "en": "Age of household head is in a higher-risk range", "rw": "Imyaka y'umukuru w'urugo iri mu rwego rufite ibyago byinshi" },
+      "lowers": { "en": "Age of household head is in a lower-risk range", "rw": "Imyaka y'umukuru w'urugo iri mu rwego rufite ibyago bike" }
+    },
+    "head_sex": {
+      "showAsDriver": false,
+      "label": { "en": "Sex of household head", "rw": "Igitsina cy'umukuru w'urugo" },
+      "raises": { "en": "", "rw": "" },
+      "lowers": { "en": "", "rw": "" }
+    },
+    "district_urban_pct": {
+      "showAsDriver": false,
+      "label": { "en": "District urban share", "rw": "Ijanisha ry'imijyi mu karere" },
+      "raises": { "en": "", "rw": "" },
+      "lowers": { "en": "", "rw": "" }
+    }
+  },
+  "rules": {
+    "topDrivers": 3,
+    "protectiveFactors": 1,
+    "note": "Features with showAsDriver=false are never shown as reasons: head_sex because blaming a household for the sex of its head is inappropriate (EICV7 shows almost no poverty gap by sex anyway), district_urban_pct because it is a geographic proxy already shown on the map. They still count in the fairness view. shock_* features from plan section 9.4 are not in the current model."
+  }
+}
