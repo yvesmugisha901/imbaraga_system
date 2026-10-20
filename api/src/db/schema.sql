@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS scores (
   id            INTEGER PRIMARY KEY AUTOINCREMENT,
   batch_id      INTEGER NOT NULL REFERENCES score_batches(id) ON DELETE CASCADE,
   household_id  TEXT NOT NULL,
+  district_code TEXT,
   probability   REAL NOT NULL CHECK (probability BETWEEN 0 AND 1),
   risk_level    TEXT NOT NULL CHECK (risk_level IN ('Low','Medium','High')),
   driver1       TEXT, driver2 TEXT, driver3 TEXT,
