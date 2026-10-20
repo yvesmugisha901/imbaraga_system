@@ -1,0 +1,80 @@
+{
+  "model_version": "v0.1-synthetic",
+  "trained_at": "2026-10-20T07:06:11+00:00",
+  "data_origin": "synthetic",
+  "features": [
+    "household_size",
+    "dependency_ratio",
+    "head_age",
+    "ubudehe_category",
+    "income_sources_count",
+    "land_size_ha",
+    "asset_index",
+    "has_electricity",
+    "improved_water",
+    "has_mobile_money",
+    "has_savings",
+    "has_credit",
+    "district_urban_pct",
+    "head_education_level",
+    "head_sex",
+    "main_income_source"
+  ],
+  "numeric": [
+    "household_size",
+    "dependency_ratio",
+    "head_age",
+    "ubudehe_category",
+    "income_sources_count",
+    "land_size_ha",
+    "asset_index",
+    "has_electricity",
+    "improved_water",
+    "has_mobile_money",
+    "has_savings",
+    "has_credit",
+    "district_urban_pct"
+  ],
+  "ordinal": {
+    "head_education_level": [
+      "none_or_below_primary",
+      "primary",
+      "lower_secondary",
+      "upper_secondary",
+      "university"
+    ]
+  },
+  "categorical": [
+    "head_sex",
+    "main_income_source"
+  ],
+  "categories": {
+    "head_sex": [
+      "F",
+      "M"
+    ],
+    "main_income_source": [
+      "farm_wages",
+      "non_farm_wages",
+      "independent_farmer",
+      "independent_non_farmer",
+      "other"
+    ]
+  },
+  "label": "is_poor",
+  "risk_thresholds": {
+    "low_below": 0.33,
+    "high_above": 0.66
+  },
+  "excluded_for_leakage": [
+    "consumption",
+    "expenditure",
+    "food spending",
+    "poverty rate aggregates"
+  ],
+  "versions": {
+    "sklearn": "1.8.0",
+    "xgboost": "3.4.1",
+    "pandas": "3.0.2"
+  }
+}
