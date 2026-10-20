@@ -1,0 +1,31 @@
+district_code,district_name_en,province,urban_pct,poverty_rate_est,poverty_rate_source,province_rate_eicv7
+nyarugenge,Nyarugenge,Kigali City,84.4,9.3,modelled,9.1
+gasabo,Gasabo,Kigali City,81.2,9.5,modelled,9.1
+kicukiro,Kicukiro,Kigali City,99.1,8.3,modelled,9.1
+nyanza,Nyanza,South,9.2,35.7,modelled,34.7
+gisagara,Gisagara,South,3.4,36.9,modelled,34.7
+nyaruguru,Nyaruguru,South,2.4,37.1,modelled,34.7
+huye,Huye,South,20.9,33.5,modelled,34.7
+nyamagabe,Nyamagabe,South,10.9,35.4,modelled,34.7
+ruhango,Ruhango,South,10.9,35.4,modelled,34.7
+muhanga,Muhanga,South,24.3,32.9,modelled,34.7
+kamonyi,Kamonyi,South,31.6,31.6,modelled,34.7
+karongi,Karongi,West,9.0,39.9,modelled,37.4
+rutsiro,Rutsiro,West,5.6,40.6,modelled,37.4
+rubavu,Rubavu,West,53.9,31.4,modelled,37.4
+nyabihu,Nyabihu,West,24.5,36.9,modelled,37.4
+ngororero,Ngororero,West,4.9,40.7,modelled,37.4
+rusizi,Rusizi,West,33.4,35.2,modelled,37.4
+nyamasheke,Nyamasheke,West,7.7,40.2,modelled,37.4
+rulindo,Rulindo,North,10.6,21.0,modelled,20.2
+gakenke,Gakenke,North,4.0,21.9,modelled,20.2
+musanze,Musanze,North,49.2,16.2,modelled,20.2
+burera,Burera,North,9.9,21.1,modelled,20.2
+gicumbi,Gicumbi,North,6.3,21.6,modelled,20.2
+rwamagana,Rwamagana,East,37.1,24.2,modelled,26.8
+nyagatare,Nyagatare,East,24.1,26.2,modelled,26.8
+gatsibo,Gatsibo,East,10.0,28.6,modelled,26.8
+kayonza,Kayonza,East,14.2,27.9,modelled,26.8
+kirehe,Kirehe,East,6.3,29.2,modelled,26.8
+ngoma,Ngoma,East,9.2,28.7,modelled,26.8
+bugesera,Bugesera,East,40.1,23.7,modelled,26.8

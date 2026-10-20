@@ -1,0 +1,17 @@
+{
+  "synthetic": true,
+  "n_train": 20000,
+  "seed": 42,
+  "urban_logit_beta": -0.8348,
+  "sources": {
+    "district / is_poor": "EICV7 province poverty rates (Table 5.1) + district population and urban share (RPHC 2022); district shift from EICV7 urban vs rural gap. MODELLED at district level.",
+    "head_education_level": "EICV7 Table 6.3 (shares of poor and non-poor)",
+    "main_income_source": "EICV7 Table 6.9 (poor vs non-poor households)",
+    "head_age, head_sex": "EICV7 Table 6.1 (shares of poor and non-poor individuals)",
+    "has_savings, has_mobile_money": "EICV7 Table 6.9 memo items (national, by poverty status)",
+    "has_electricity, improved_water, asset_index": "EICV7 Tables 6.7 and 6.8 (asset_index = mean of TV, radio, bicycle, modern floor, iron roof)",
+    "has_credit": "RHHS 2019/20 national rate 54.7%; same for poor and non-poor (no published split)",
+    "household_size, dependency_ratio, income_sources_count, land_size_ha, ubudehe_category": "ASSUMED - not taken from any NISR table we hold; do not cite as NISR statistics"
+  },
+  "warning": "Synthetic data. Metrics on it do not reflect real-world accuracy."
+}
