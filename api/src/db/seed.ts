@@ -19,7 +19,8 @@ const insert = db.prepare(`
   VALUES (@code, @name_en, @province, @population, @density, @urban_pct, @poverty_rate, 'province_eicv7')
   ON CONFLICT(code) DO UPDATE SET
     population = excluded.population, density_per_km2 = excluded.density_per_km2,
-    urban_pct = excluded.urban_pct, poverty_rate = excluded.poverty_rate`);
+    urban_pct = excluded.urban_pct, poverty_rate = excluded.poverty_rate,
+    poverty_rate_source = 'province_eicv7'`);
 
 db.transaction(() => {
   for (const r of rows) {
@@ -34,6 +35,23 @@ db.transaction(() => {
     });
   }
 })();
+
+// Modelled district poverty rates (ml/pipeline/generate_synthetic.py). Optional: without the file,
+// districts keep their province-level EICV7 rate.
+const estPath = path.join(root, 'data/processed/district_estimates.csv');
+if (fs.existsSync(estPath)) {
+  const est = parse(fs.readFileSync(estPath, 'utf8'), { columns: true, skip_empty_lines: true }) as Record<string, string>[];
+  const update = db.prepare(
+    `UPDATE districts SET poverty_rate = @rate, poverty_rate_source = 'modelled' WHERE code = @code`,
+  );
+  db.transaction(() => {
+    for (const e of est) {
+      const res = update.run({ code: e.district_code, rate: Number(e.poverty_rate_est) });
+      if (res.changes !== 1) throw new Error(`No district matches estimate code '${e.district_code}'`);
+    }
+  })();
+  console.log(`Applied ${est.length} modelled district poverty estimates`);
+}
 
 const n = (db.prepare('SELECT COUNT(*) c FROM districts').get() as { c: number }).c;
 console.log(`Seeded ${n} districts into ${dbPath}`);
