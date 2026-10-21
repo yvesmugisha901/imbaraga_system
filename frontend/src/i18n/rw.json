@@ -1,7 +1,16 @@
 {
-  "app": { "name": "Imbaraga", "tagline": "Kubona ubukene mbere y'ubushakashatsi bukurikira" },
-  "nav": { "dashboard": "Ahabanza", "targeting": "Guhitamo ingo", "insights": "Ubusesenguzi" },
-  "lang": { "label": "Ururimi" },
+  "app": {
+    "name": "Imbaraga",
+    "tagline": "Kubona ubukene mbere y'ubushakashatsi bukurikira"
+  },
+  "nav": {
+    "dashboard": "Ahabanza",
+    "targeting": "Guhitamo ingo",
+    "insights": "Ubusesenguzi"
+  },
+  "lang": {
+    "label": "Ururimi"
+  },
   "dashboard": {
     "title": "Incamake y'igihugu",
     "kpi": {
@@ -16,9 +25,81 @@
     "loading": "Biraje…",
     "retry": "Ongera ugerageze",
     "error": "Ntibishobotse kubona amakuru",
-    "source": { "province_eicv7": "Igipimo cy'intara (EICV7)", "microdata": "Amakuru ya EICV7", "modelled": "Igereranya" }
+    "source": {
+      "province_eicv7": "Igipimo cy'intara (EICV7)",
+      "microdata": "Amakuru ya EICV7",
+      "modelled": "Igereranya"
+    }
   },
-  "table": { "district": "Akarere", "province": "Intara", "population": "Abaturage", "poverty": "Igipimo cy'ubukene (%)", "source": "Inkomoko" },
-  "placeholder": { "soon": "Biraza vuba" },
-  "notice": { "decisionSupport": "Ifasha gufata ibyemezo gusa. Umuntu ni we ufata icyemezo cya nyuma." }
+  "table": {
+    "district": "Akarere",
+    "province": "Intara",
+    "population": "Abaturage",
+    "poverty": "Igipimo cy'ubukene (%)",
+    "source": "Inkomoko"
+  },
+  "placeholder": {
+    "soon": "Biraza vuba"
+  },
+  "notice": {
+    "decisionSupport": "Ifasha gufata ibyemezo gusa. Umuntu ni we ufata icyemezo cya nyuma."
+  },
+  "risk": {
+    "Low": "Bike",
+    "Medium": "Biringaniye",
+    "High": "Byinshi"
+  },
+  "targeting": {
+    "title": "Umufasha mu guhitamo ingo",
+    "intro": "Shyiramo urutonde rw'ingo kugira ngo zisuzumwe, zitondekwe kandi zisohorwe.",
+    "upload": {
+      "choose": "Hitamo dosiye ya CSV",
+      "demo": "Koresha dosiye y'ikitegererezo (ingo 200)",
+      "template": "Manura icyitegererezo",
+      "fileReady": "{{name}} · imirongo {{count}}",
+      "score": "Suzuma zose",
+      "scoring": "Birasuzumwa…",
+      "clear": "Siba",
+      "tooLarge": "Dosiye ni nini cyane (ntarenze 2 MB).",
+      "readFail": "Ntibishobotse gusoma iyo dosiye.",
+      "demoFail": "Ntibishobotse gufungura dosiye y'ikitegererezo."
+    },
+    "error": {
+      "title": "Ntibishobotse gusuzuma dosiye",
+      "problems": "Hagaragaye ibibazo {{count}}:",
+      "showingFirst": "Hagaragajwe ibya mbere {{n}}.",
+      "fix": "Subiramo dosiye hanyuma wongere ugerageze."
+    },
+    "result": {
+      "scored": "Ingo {{count}} zasuzumwe",
+      "elapsed": "Ingo {{count}} zasuzumwe mu masegonda {{seconds}}",
+      "download": "Manura urutonde (CSV)",
+      "mockBanner": "Isuzuma ry'ikitegererezo: uru rutonde rwasuzumwe n'uburyo bw'agateganyo, si ubwatojwe."
+    },
+    "filter": {
+      "risk": "Urwego rw'ibyago",
+      "district": "Akarere",
+      "all": "Byose"
+    },
+    "table": {
+      "rank": "Umwanya",
+      "household": "Urugo",
+      "risk": "Ibyago",
+      "probability": "Amahirwe",
+      "reasons": "Impamvu z'ingenzi",
+      "showMore": "Erekana izindi ({{shown}} kuri {{total}})"
+    },
+    "empty": {
+      "start": "Hitamo dosiye ya CSV cyangwa ukoreshe iy'ikitegererezo kugira ngo utangire.",
+      "noMatch": "Nta ngo zihuye n'ayo mahitamo."
+    },
+    "drawer": {
+      "title": "Urugo {{id}}",
+      "close": "Funga",
+      "why": "Impamvu y'iri suzuma",
+      "none": "Nta mpamvu zigaragara zabonetse.",
+      "axis": "Ingaruka ku manota y'ibyago: iburyo (umutuku) byongera ibyago, ibumoso (icyatsi) bigabanya",
+      "protective": "Igikingira"
+    }
+  }
 }

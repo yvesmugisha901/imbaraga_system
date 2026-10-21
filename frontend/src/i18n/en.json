@@ -1,7 +1,16 @@
 {
-  "app": { "name": "Imbaraga", "tagline": "Seeing poverty before the next survey" },
-  "nav": { "dashboard": "Dashboard", "targeting": "Targeting", "insights": "Insights" },
-  "lang": { "label": "Language" },
+  "app": {
+    "name": "Imbaraga",
+    "tagline": "Seeing poverty before the next survey"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "targeting": "Targeting",
+    "insights": "Insights"
+  },
+  "lang": {
+    "label": "Language"
+  },
   "dashboard": {
     "title": "National overview",
     "kpi": {
@@ -16,9 +25,81 @@
     "loading": "Loading…",
     "retry": "Try again",
     "error": "Could not load data",
-    "source": { "province_eicv7": "Province rate (EICV7)", "microdata": "EICV7 microdata", "modelled": "Modelled estimate" }
+    "source": {
+      "province_eicv7": "Province rate (EICV7)",
+      "microdata": "EICV7 microdata",
+      "modelled": "Modelled estimate"
+    }
   },
-  "table": { "district": "District", "province": "Province", "population": "Population", "poverty": "Poverty rate (%)", "source": "Source" },
-  "placeholder": { "soon": "Coming soon" },
-  "notice": { "decisionSupport": "Decision-support only. A human makes the final decision." }
+  "table": {
+    "district": "District",
+    "province": "Province",
+    "population": "Population",
+    "poverty": "Poverty rate (%)",
+    "source": "Source"
+  },
+  "placeholder": {
+    "soon": "Coming soon"
+  },
+  "notice": {
+    "decisionSupport": "Decision-support only. A human makes the final decision."
+  },
+  "risk": {
+    "Low": "Low",
+    "Medium": "Medium",
+    "High": "High"
+  },
+  "targeting": {
+    "title": "Targeting Assistant",
+    "intro": "Upload a household list to score, rank and export it.",
+    "upload": {
+      "choose": "Choose CSV file",
+      "demo": "Load demo file (200 households)",
+      "template": "Download template",
+      "fileReady": "{{name}} · {{count}} rows",
+      "score": "Score all",
+      "scoring": "Scoring…",
+      "clear": "Clear",
+      "tooLarge": "File is too large (maximum 2 MB).",
+      "readFail": "Could not read that file.",
+      "demoFail": "Could not load the demo file."
+    },
+    "error": {
+      "title": "Could not score the file",
+      "problems": "{{count}} problem(s) found:",
+      "showingFirst": "Showing the first {{n}}.",
+      "fix": "Fix the file and try again."
+    },
+    "result": {
+      "scored": "Scored {{count}} households",
+      "elapsed": "Scored {{count}} households in {{seconds}} s",
+      "download": "Download ranked list (CSV)",
+      "mockBanner": "Demo scoring: this batch was scored by a placeholder model, not the trained model."
+    },
+    "filter": {
+      "risk": "Risk level",
+      "district": "District",
+      "all": "All"
+    },
+    "table": {
+      "rank": "Rank",
+      "household": "Household",
+      "risk": "Risk",
+      "probability": "Probability",
+      "reasons": "Main reasons",
+      "showMore": "Show more ({{shown}} of {{total}})"
+    },
+    "empty": {
+      "start": "Choose a CSV file or load the demo file to begin.",
+      "noMatch": "No households match the filters."
+    },
+    "drawer": {
+      "title": "Household {{id}}",
+      "close": "Close",
+      "why": "Why this score",
+      "none": "No notable factors found.",
+      "axis": "Effect on risk score: right (red) raises risk, left (green) lowers it",
+      "protective": "Protective factor"
+    }
+  }
 }
