@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router-dom'
 import PageShell from './components/layout/PageShell'
 import Dashboard from './pages/Dashboard'
+import Targeting from './pages/Targeting'
 import Placeholder from './pages/Placeholder'
 
 export default function App() {
@@ -8,7 +9,7 @@ export default function App() {
     <PageShell>
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/targeting" element={<Placeholder titleKey="nav.targeting" />} />
+        <Route path="/targeting" element={<Targeting />} />
         <Route path="/insights" element={<Placeholder titleKey="nav.insights" />} />
       </Routes>
     </PageShell>
