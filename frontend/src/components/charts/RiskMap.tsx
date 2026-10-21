@@ -1,9 +1,8 @@
 import { useMemo, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { buildShapes, matchDistricts, riskColor, type GeoCollection } from '../../utils/geo'
+import { layerValue, type MapLayer } from '../../utils/mapLayers'
 import type { District } from '../../types'
-
-export type MapLayer = 'poverty' | 'access' | 'double'
 
 interface Props {
   geo: GeoCollection
@@ -16,9 +15,6 @@ interface Props {
 }
 
 const W = 520, H = 460
-
-export const layerValue = (d: District, layer: MapLayer): number | null =>
-  layer === 'poverty' ? d.povertyRate : layer === 'access' ? d.exclusionGap : d.doubleExclusionFlag ? 1 : 0
 
 export default function RiskMap({ geo, districts, layer, lang, activeCode, onHover, onSelect }: Props) {
   const { t } = useTranslation()

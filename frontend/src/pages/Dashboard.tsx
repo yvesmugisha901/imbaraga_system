@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useDistricts, useGeoJson, useKpis } from '../api/hooks'
 import KpiCard from '../components/ui/KpiCard'
 import ErrorState from '../components/ui/ErrorState'
-import RiskMap, { type MapLayer } from '../components/charts/RiskMap'
+import RiskMap from '../components/charts/RiskMap'
+import type { MapLayer } from '../utils/mapLayers'
 import type { District } from '../types'
 
 export default function Dashboard() {
