@@ -101,5 +101,26 @@
       "axis": "Effect on risk score: right (red) raises risk, left (green) lowers it",
       "protective": "Protective factor"
     }
+  },
+  "map": {
+    "title": "Poverty by district",
+    "aria": "Map of Rwanda districts",
+    "layerLabel": "Map layer",
+    "layer": {
+      "poverty": "Poverty rate",
+      "access": "Financial access gap",
+      "double": "Double exclusion"
+    },
+    "layerPending": "Needs financial access data, which is not available yet",
+    "modelledNote": "District poverty rates are modelled estimates built from provincial EICV7 rates and each district's urban share. They are not official district statistics.",
+    "hint": "Hover over or select a district to see its details.",
+    "top5": "Top 5 districts by poverty rate",
+    "noData": "No data",
+    "flagged": "Flagged",
+    "notFlagged": "Not flagged",
+    "error": "Could not load the map boundaries",
+    "errorHint": "Place rwanda_districts.geojson in the frontend public folder.",
+    "unmatched": "{{count}} district(s) could not be matched to the map file.",
+    "attribution": "Boundaries: geoBoundaries (CC BY 4.0). Poverty: EICV7 2023/24, NISR. Population: RPHC 2022."
   }
 }

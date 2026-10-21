@@ -101,5 +101,26 @@
       "axis": "Ingaruka ku manota y'ibyago: iburyo (umutuku) byongera ibyago, ibumoso (icyatsi) bigabanya",
       "protective": "Igikingira"
     }
+  },
+  "map": {
+    "title": "Ubukene mu turere",
+    "aria": "Ikarita y'uturere tw'u Rwanda",
+    "layerLabel": "Urwego rw'ikarita",
+    "layer": {
+      "poverty": "Igipimo cy'ubukene",
+      "access": "Icyuho cya serivisi z'imari",
+      "double": "Guhezwa kabiri"
+    },
+    "layerPending": "Bisaba amakuru kuri serivisi z'imari atarabonetse",
+    "modelledNote": "Ibipimo by'ubukene mu turere ni ibigereranyo bikomoka ku bipimo by'intara bya EICV7 n'ijanisha ry'imijyi mu karere. Si imibare yemewe y'uturere.",
+    "hint": "Shyira indanga ku karere cyangwa urihitemo urebe amakuru yaryo.",
+    "top5": "Uturere 5 dufite ubukene bwinshi",
+    "noData": "Nta makuru",
+    "flagged": "Karagaragajwe",
+    "notFlagged": "Ntikagaragajwe",
+    "error": "Ntibishobotse kubona imipaka y'ikarita",
+    "errorHint": "Shyira rwanda_districts.geojson mu ibumbe rya public rya frontend.",
+    "unmatched": "Uturere {{count}} ntitwahuye n'ikarita.",
+    "attribution": "Imipaka: geoBoundaries (CC BY 4.0). Ubukene: EICV7 2023/24, NISR. Abaturage: RPHC 2022."
   }
 }
