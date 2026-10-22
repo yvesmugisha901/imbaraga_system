@@ -2,21 +2,25 @@ import { useMemo, type KeyboardEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { buildShapes, matchDistricts, riskColor, type GeoCollection } from '../../utils/geo'
 import { layerValue, type MapLayer } from '../../utils/mapLayers'
+import type { DistrictVulnerability } from '../../api/vulnerability'
 import type { District } from '../../types'
+
+export type RiskLayer = MapLayer | 'vulnerability'
 
 interface Props {
   geo: GeoCollection
   districts: District[]
-  layer: MapLayer
+  layer: RiskLayer
   lang: 'en' | 'rw'
   activeCode: string | null
   onHover: (code: string | null) => void
   onSelect: (code: string | null) => void
+  vuln?: Record<string, DistrictVulnerability> | null
 }
 
 const W = 520, H = 460
 
-export default function RiskMap({ geo, districts, layer, lang, activeCode, onHover, onSelect }: Props) {
+export default function RiskMap({ geo, districts, layer, lang, activeCode, onHover, onSelect, vuln }: Props) {
   const { t } = useTranslation()
   const shapes = useMemo(() => buildShapes(geo, W, H), [geo])
   const match = useMemo(() => matchDistricts(shapes.map((s) => s.name), districts), [shapes, districts])
@@ -28,14 +32,24 @@ export default function RiskMap({ geo, districts, layer, lang, activeCode, onHov
     return m
   }, [match])
 
+  // Value shown for a district on the current layer (percent), or null if unknown.
+  const valueOf = (d: District): number | null => {
+    if (layer === 'vulnerability') {
+      const v = vuln?.[d.code]
+      return v ? Math.round(v.share_exposed * 100) : null
+    }
+    return layerValue(d, layer)
+  }
+
   const range = useMemo(() => {
-    const vals = districts.map((d) => layerValue(d, layer)).filter((v): v is number => v !== null)
+    const vals = districts.map((d) => valueOf(d)).filter((v): v is number => v !== null)
     return vals.length ? { min: Math.min(...vals), max: Math.max(...vals) } : null
-  }, [districts, layer])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [districts, layer, vuln])
 
   const fillFor = (code: string | undefined): string => {
     const d = code ? byCode.get(code) : undefined
-    const v = d ? layerValue(d, layer) : null
+    const v = d ? valueOf(d) : null
     if (v === null || !range) return '#e2e8f0'
     if (layer === 'double') return v === 1 ? '#dc2626' : '#cbd5e1'
     return riskColor(range.max === range.min ? 0.5 : (v - range.min) / (range.max - range.min))
@@ -54,7 +68,7 @@ export default function RiskMap({ geo, districts, layer, lang, activeCode, onHov
         {shapes.map((s) => {
           const code = codeAt.get(s.index)
           const d = code ? byCode.get(code) : undefined
-          const v = d ? layerValue(d, layer) : null
+          const v = d ? valueOf(d) : null
           const name = d ? (lang === 'rw' && d.nameRw ? d.nameRw : d.nameEn) : s.name ?? ''
           const active = code !== undefined && code === activeCode
           return (
@@ -86,6 +100,7 @@ export default function RiskMap({ geo, districts, layer, lang, activeCode, onHov
             <span className="tabular-nums">{range.min}%</span>
             <span aria-hidden="true" className="h-2.5 w-32 rounded" style={{ background: `linear-gradient(to right, ${riskColor(0)}, ${riskColor(0.5)}, ${riskColor(1)})` }} />
             <span className="tabular-nums">{range.max}%</span>
+            {layer === 'vulnerability' && <span>{t('map.vulnLegend', 'of households poor or at risk')}</span>}
           </div>
         ) : layer === 'double' ? (
           <span>■ {t('map.flagged')} &nbsp; <span className="text-slate-400">■</span> {t('map.notFlagged')}</span>
