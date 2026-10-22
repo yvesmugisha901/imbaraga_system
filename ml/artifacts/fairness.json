@@ -1,0 +1,273 @@
+{
+  "threshold": 0.5,
+  "overall": {
+    "n": 4000,
+    "actual_poverty_rate": 0.27325,
+    "predicted_poverty_rate": 0.3575,
+    "recall": 0.8462946020128088,
+    "false_positive_rate": 0.17371861025111798,
+    "precision": 0.6468531468531469
+  },
+  "groups": {
+    "head_sex": {
+      "F": {
+        "n": 801,
+        "actual_poverty_rate": 0.3096129837702871,
+        "predicted_poverty_rate": 0.3782771535580524,
+        "recall": 0.8306451612903226,
+        "false_positive_rate": 0.17540687160940324,
+        "precision": 0.6798679867986799
+      },
+      "M": {
+        "n": 3199,
+        "actual_poverty_rate": 0.2641450453266646,
+        "predicted_poverty_rate": 0.3522975929978118,
+        "recall": 0.850887573964497,
+        "false_positive_rate": 0.17332200509770604,
+        "precision": 0.6379769299023957
+      }
+    },
+    "district_code": {
+      "bugesera": {
+        "n": 167,
+        "actual_poverty_rate": 0.25149700598802394,
+        "predicted_poverty_rate": 0.39520958083832336,
+        "recall": 0.9047619047619048,
+        "false_positive_rate": 0.224,
+        "precision": 0.5757575757575758
+      },
+      "burera": {
+        "n": 116,
+        "actual_poverty_rate": 0.20689655172413793,
+        "predicted_poverty_rate": 0.29310344827586204,
+        "recall": 0.8333333333333334,
+        "false_positive_rate": 0.15217391304347827,
+        "precision": 0.5882352941176471
+      },
+      "gakenke": {
+        "n": 117,
+        "actual_poverty_rate": 0.23076923076923078,
+        "predicted_poverty_rate": 0.358974358974359,
+        "recall": 0.9259259259259259,
+        "false_positive_rate": 0.18888888888888888,
+        "precision": 0.5952380952380952
+      },
+      "gasabo": {
+        "n": 254,
+        "actual_poverty_rate": 0.0984251968503937,
+        "predicted_poverty_rate": 0.11811023622047244,
+        "recall": 0.64,
+        "false_positive_rate": 0.0611353711790393,
+        "precision": 0.5333333333333333
+      },
+      "gatsibo": {
+        "n": 165,
+        "actual_poverty_rate": 0.30303030303030304,
+        "predicted_poverty_rate": 0.40606060606060607,
+        "recall": 0.86,
+        "false_positive_rate": 0.20869565217391303,
+        "precision": 0.6417910447761194
+      },
+      "gicumbi": {
+        "n": 141,
+        "actual_poverty_rate": 0.2198581560283688,
+        "predicted_poverty_rate": 0.3191489361702128,
+        "recall": 0.7741935483870968,
+        "false_positive_rate": 0.19090909090909092,
+        "precision": 0.5333333333333333
+      },
+      "gisagara": {
+        "n": 124,
+        "actual_poverty_rate": 0.3790322580645161,
+        "predicted_poverty_rate": 0.4274193548387097,
+        "recall": 0.7872340425531915,
+        "false_positive_rate": 0.2077922077922078,
+        "precision": 0.6981132075471698
+      },
+      "huye": {
+        "n": 119,
+        "actual_poverty_rate": 0.3697478991596639,
+        "predicted_poverty_rate": 0.42016806722689076,
+        "recall": 0.8863636363636364,
+        "false_positive_rate": 0.14666666666666667,
+        "precision": 0.78
+      },
+      "kamonyi": {
+        "n": 134,
+        "actual_poverty_rate": 0.30597014925373134,
+        "predicted_poverty_rate": 0.3656716417910448,
+        "recall": 0.8292682926829268,
+        "false_positive_rate": 0.16129032258064516,
+        "precision": 0.6938775510204082
+      },
+      "karongi": {
+        "n": 106,
+        "actual_poverty_rate": 0.39622641509433965,
+        "predicted_poverty_rate": 0.49056603773584906,
+        "recall": 0.9285714285714286,
+        "false_positive_rate": 0.203125,
+        "precision": 0.75
+      },
+      "kayonza": {
+        "n": 139,
+        "actual_poverty_rate": 0.2805755395683453,
+        "predicted_poverty_rate": 0.381294964028777,
+        "recall": 0.9487179487179487,
+        "false_positive_rate": 0.16,
+        "precision": 0.6981132075471698
+      },
+      "kicukiro": {
+        "n": 153,
+        "actual_poverty_rate": 0.0915032679738562,
+        "predicted_poverty_rate": 0.13071895424836602,
+        "recall": 0.42857142857142855,
+        "false_positive_rate": 0.10071942446043165,
+        "precision": 0.3
+      },
+      "kirehe": {
+        "n": 134,
+        "actual_poverty_rate": 0.291044776119403,
+        "predicted_poverty_rate": 0.43283582089552236,
+        "recall": 0.8974358974358975,
+        "false_positive_rate": 0.24210526315789474,
+        "precision": 0.603448275862069
+      },
+      "muhanga": {
+        "n": 114,
+        "actual_poverty_rate": 0.3157894736842105,
+        "predicted_poverty_rate": 0.4473684210526316,
+        "recall": 0.9166666666666666,
+        "false_positive_rate": 0.23076923076923078,
+        "precision": 0.6470588235294118
+      },
+      "musanze": {
+        "n": 151,
+        "actual_poverty_rate": 0.15894039735099338,
+        "predicted_poverty_rate": 0.25165562913907286,
+        "recall": 0.9166666666666666,
+        "false_positive_rate": 0.12598425196850394,
+        "precision": 0.5789473684210527
+      },
+      "ngoma": {
+        "n": 122,
+        "actual_poverty_rate": 0.28688524590163933,
+        "predicted_poverty_rate": 0.4426229508196721,
+        "recall": 0.9142857142857143,
+        "false_positive_rate": 0.25287356321839083,
+        "precision": 0.5925925925925926
+      },
+      "ngororero": {
+        "n": 111,
+        "actual_poverty_rate": 0.42342342342342343,
+        "predicted_poverty_rate": 0.5135135135135135,
+        "recall": 0.8936170212765957,
+        "false_positive_rate": 0.234375,
+        "precision": 0.7368421052631579
+      },
+      "nyabihu": {
+        "n": 88,
+        "actual_poverty_rate": 0.36363636363636365,
+        "predicted_poverty_rate": 0.4431818181818182,
+        "recall": 0.875,
+        "false_positive_rate": 0.19642857142857142,
+        "precision": 0.717948717948718
+      },
+      "nyagatare": {
+        "n": 198,
+        "actual_poverty_rate": 0.2676767676767677,
+        "predicted_poverty_rate": 0.3787878787878788,
+        "recall": 0.8679245283018868,
+        "false_positive_rate": 0.2,
+        "precision": 0.6133333333333333
+      },
+      "nyamagabe": {
+        "n": 110,
+        "actual_poverty_rate": 0.35454545454545455,
+        "predicted_poverty_rate": 0.4727272727272727,
+        "recall": 0.8974358974358975,
+        "false_positive_rate": 0.23943661971830985,
+        "precision": 0.6730769230769231
+      },
+      "nyamasheke": {
+        "n": 131,
+        "actual_poverty_rate": 0.366412213740458,
+        "predicted_poverty_rate": 0.46564885496183206,
+        "recall": 0.875,
+        "false_positive_rate": 0.2289156626506024,
+        "precision": 0.6885245901639344
+      },
+      "nyanza": {
+        "n": 116,
+        "actual_poverty_rate": 0.35344827586206895,
+        "predicted_poverty_rate": 0.4051724137931034,
+        "recall": 0.8292682926829268,
+        "false_positive_rate": 0.17333333333333334,
+        "precision": 0.723404255319149
+      },
+      "nyarugenge": {
+        "n": 114,
+        "actual_poverty_rate": 0.10526315789473684,
+        "predicted_poverty_rate": 0.09649122807017543,
+        "recall": 0.5833333333333334,
+        "false_positive_rate": 0.0392156862745098,
+        "precision": 0.6363636363636364
+      },
+      "nyaruguru": {
+        "n": 96,
+        "actual_poverty_rate": 0.3541666666666667,
+        "predicted_poverty_rate": 0.40625,
+        "recall": 0.7352941176470589,
+        "false_positive_rate": 0.22580645161290322,
+        "precision": 0.6410256410256411
+      },
+      "rubavu": {
+        "n": 168,
+        "actual_poverty_rate": 0.2976190476190476,
+        "predicted_poverty_rate": 0.3630952380952381,
+        "recall": 0.8,
+        "false_positive_rate": 0.17796610169491525,
+        "precision": 0.6557377049180327
+      },
+      "ruhango": {
+        "n": 108,
+        "actual_poverty_rate": 0.3425925925925926,
+        "predicted_poverty_rate": 0.4537037037037037,
+        "recall": 0.8918918918918919,
+        "false_positive_rate": 0.22535211267605634,
+        "precision": 0.673469387755102
+      },
+      "rulindo": {
+        "n": 107,
+        "actual_poverty_rate": 0.205607476635514,
+        "predicted_poverty_rate": 0.35514018691588783,
+        "recall": 0.9090909090909091,
+        "false_positive_rate": 0.21176470588235294,
+        "precision": 0.5263157894736842
+      },
+      "rusizi": {
+        "n": 145,
+        "actual_poverty_rate": 0.3103448275862069,
+        "predicted_poverty_rate": 0.33793103448275863,
+        "recall": 0.8,
+        "false_positive_rate": 0.13,
+        "precision": 0.7346938775510204
+      },
+      "rutsiro": {
+        "n": 109,
+        "actual_poverty_rate": 0.3853211009174312,
+        "predicted_poverty_rate": 0.5137614678899083,
+        "recall": 0.8571428571428571,
+        "false_positive_rate": 0.29850746268656714,
+        "precision": 0.6428571428571429
+      },
+      "rwamagana": {
+        "n": 143,
+        "actual_poverty_rate": 0.21678321678321677,
+        "predicted_poverty_rate": 0.23776223776223776,
+        "recall": 0.6774193548387096,
+        "false_positive_rate": 0.11607142857142858,
+        "precision": 0.6176470588235294
+      }
+    }
+  }
+}

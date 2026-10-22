@@ -1,6 +1,6 @@
 {
   "model_version": "v0.1-synthetic",
-  "trained_at": "2026-10-20T07:06:11+00:00",
+  "trained_at": "2026-10-22T10:45:32+00:00",
   "data_origin": "synthetic",
   "features": [
     "household_size",
@@ -73,8 +73,8 @@
     "poverty rate aggregates"
   ],
   "versions": {
-    "sklearn": "1.8.0",
+    "sklearn": "1.9.1",
     "xgboost": "3.4.1",
-    "pandas": "3.0.2"
+    "pandas": "3.0.6"
   }
 }

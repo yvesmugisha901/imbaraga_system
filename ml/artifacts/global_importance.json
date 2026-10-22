@@ -1,0 +1,77 @@
+[
+  {
+    "feature": "asset_index",
+    "mean_abs_shap": 1.0406466722488403,
+    "share": 0.1743261041008519
+  },
+  {
+    "feature": "head_education_level",
+    "mean_abs_shap": 0.6819571852684021,
+    "share": 0.11423948439148615
+  },
+  {
+    "feature": "main_income_source",
+    "mean_abs_shap": 0.6136677265167236,
+    "share": 0.10279983286249025
+  },
+  {
+    "feature": "land_size_ha",
+    "mean_abs_shap": 0.44969597458839417,
+    "share": 0.07533176184614258
+  },
+  {
+    "feature": "income_sources_count",
+    "mean_abs_shap": 0.4279439449310303,
+    "share": 0.0716879250977292
+  },
+  {
+    "feature": "has_savings",
+    "mean_abs_shap": 0.40572965145111084,
+    "share": 0.06796665125812833
+  },
+  {
+    "feature": "district_urban_pct",
+    "mean_abs_shap": 0.37390467524528503,
+    "share": 0.06263542379830775
+  },
+  {
+    "feature": "household_size",
+    "mean_abs_shap": 0.3665067255496979,
+    "share": 0.06139614078020243
+  },
+  {
+    "feature": "has_electricity",
+    "mean_abs_shap": 0.36576396226882935,
+    "share": 0.0612717152355138
+  },
+  {
+    "feature": "ubudehe_category",
+    "mean_abs_shap": 0.34669700264930725,
+    "share": 0.058077673611052864
+  },
+  {
+    "feature": "dependency_ratio",
+    "mean_abs_shap": 0.2789701521396637,
+    "share": 0.046732268578571524
+  },
+  {
+    "feature": "has_mobile_money",
+    "mean_abs_shap": 0.22440209984779358,
+    "share": 0.03759118715479063
+  },
+  {
+    "feature": "head_age",
+    "mean_abs_shap": 0.1897507607936859,
+    "share": 0.031786495610323894
+  },
+  {
+    "feature": "improved_water",
+    "mean_abs_shap": 0.12747421860694885,
+    "share": 0.021354110377374995
+  },
+  {
+    "feature": "head_sex",
+    "mean_abs_shap": 0.04839897155761719,
+    "share": 0.008107654960251323
+  }
+]
