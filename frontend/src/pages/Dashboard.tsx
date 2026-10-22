@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { useDistricts, useGeoJson, useKpis } from '../api/hooks'
 import { useVulnerability } from '../api/useVulnerability'
 import KpiCard from '../components/ui/KpiCard'
+import AlertsPanel from '../components/ui/AlertsPanel'
 import ErrorState from '../components/ui/ErrorState'
 import RiskMap, { type RiskLayer } from '../components/charts/RiskMap'
 import type { District } from '../types'
@@ -76,6 +77,20 @@ export default function Dashboard() {
           <KpiCard loading={kpis.isLoading} label={t('home.kpi.highRisk', 'Districts needing most attention')} value={kpis.data?.highRiskDistrictCount != null ? String(kpis.data.highRiskDistrictCount) : null} pendingLabel={pending} />
           <KpiCard loading={kpis.isLoading} label={t('home.kpi.scored', 'Households checked so far')} value={kpis.data ? fmt.format(kpis.data.householdsScored) : null} pendingLabel={pending} />
         </section>
+      )}
+
+      {vuln.data && (
+        <AlertsPanel
+          data={vuln.data}
+          nameFor={(code, fallback) => {
+            const d = list.find((x) => x.code === code)
+            return d ? nameOf(d) : fallback
+          }}
+          onSelect={(code) => {
+            setSelected(code)
+            setLayer('vulnerability')
+          }}
+        />
       )}
 
       <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
