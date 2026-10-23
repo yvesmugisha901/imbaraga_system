@@ -5,7 +5,7 @@ import Navbar from './Navbar'
 export default function PageShell({ children }: { children: ReactNode }) {
   const { t } = useTranslation()
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50 text-slate-900">
+    <div className="flex min-h-screen flex-col bg-slate-100 text-slate-900">
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-40 focus:rounded-md focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow"

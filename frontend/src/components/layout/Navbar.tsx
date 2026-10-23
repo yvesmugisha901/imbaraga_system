@@ -20,7 +20,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <NavLink to="/" onClick={() => setOpen(false)} className={`flex items-center gap-3 rounded-md ${focus}`}>
-          <span aria-hidden="true" className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-800 text-base font-semibold text-white">
+          <span aria-hidden="true" className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-50 text-base font-semibold text-emerald-800 ring-1 ring-emerald-200">
             {name.charAt(0).toUpperCase()}
           </span>
           <span className="leading-tight">
@@ -37,7 +37,7 @@ export default function Navbar() {
               end={l.end}
               className={({ isActive }) =>
                 `flex items-center border-b-2 px-3 text-sm font-medium ${focus} ${
-                  isActive ? 'border-emerald-700 text-slate-900' : 'border-transparent text-slate-600 hover:text-slate-900'
+                  isActive ? 'border-emerald-600 text-slate-900' : 'border-transparent text-slate-600 hover:text-slate-900'
                 }`
               }
             >

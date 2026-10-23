@@ -4,6 +4,7 @@ import { useDistricts, useGeoJson, useKpis } from '../api/hooks'
 import { useVulnerability } from '../api/useVulnerability'
 import ErrorState from '../components/ui/ErrorState'
 import AlertsPanel from '../components/ui/AlertsPanel'
+import { RULES } from '../utils/alertRules'
 import DistrictTable from '../components/ui/DistrictTable'
 import RiskMap, { type RiskLayer } from '../components/charts/RiskMap'
 import type { District } from '../types'
@@ -23,15 +24,28 @@ function Note({ children }: { children: ReactNode }) {
   )
 }
 
-function Stat({ label, value, note, loading, pending }: { label: string; value: string | null; note?: string; loading: boolean; pending: string }) {
+const ICONS = {
+  home: 'M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1v-9z',
+  warn: 'M12 3l10 18H2L12 3zM12 10v5M12 18v.01',
+  pin: 'M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11zM12 12.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z',
+  check: 'M5 13l4 4L19 7',
+  users: 'M16 20v-1a4 4 0 00-4-4H7a4 4 0 00-4 4v1M9.5 11a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM21 20v-1a4 4 0 00-3-3.9',
+  bell: 'M6 8a6 6 0 1112 0c0 7 3 9 3 9H3s3-2 3-9zM10 20a2 2 0 004 0',
+  list: 'M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01',
+  help: 'M9.5 9a2.5 2.5 0 114 2c-.9.6-1.5 1.1-1.5 2M12 17v.01M12 3a9 9 0 100 18 9 9 0 000-18z',
+}
+
+const TONES = {
+  green: 'bg-emerald-50 text-emerald-700',
+  amber: 'bg-amber-50 text-amber-700',
+  slate: 'bg-slate-100 text-slate-600',
+}
+
+function Icon({ d }: { d: string }) {
   return (
-    <div className="bg-white px-5 py-4">
-      <dt className="text-sm text-slate-500">{label}</dt>
-      <dd className="mt-1 text-3xl font-semibold tabular-nums tracking-tight text-slate-900">
-        {loading ? <span className="block h-9 w-20 animate-pulse rounded bg-slate-200" /> : value ?? <span className="text-xl font-normal text-slate-400">{pending}</span>}
-      </dd>
-      {note && <p className="mt-1 text-xs text-slate-400">{note}</p>}
-    </div>
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4 shrink-0 fill-none stroke-current" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d={d} />
+    </svg>
   )
 }
 
@@ -49,6 +63,7 @@ export default function Dashboard() {
   const [layer, setLayer] = useState<RiskLayer>('poverty')
   const [hover, setHover] = useState<string | null>(null)
   const [selected, setSelected] = useState<string | null>(null)
+  const [help, setHelp] = useState(false)
 
   const list = districts.data ?? []
   const sorted = useMemo(() => [...list].sort((a, b) => (b.povertyRate ?? 0) - (a.povertyRate ?? 0)), [list])
@@ -72,6 +87,24 @@ export default function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vuln.data, list, lang])
 
+  // National summary from the vulnerability file (replaces cards that used to say "Pending").
+  const summary = useMemo(() => {
+    if (!vuln.data) return null
+    const rows = vuln.data.districts
+    const total = rows.reduce((s, d) => s + d.households, 0) || 1
+    const atRisk = rows.reduce((s, d) => s + d.households * d.share_at_risk, 0) / total
+    const exposed = rows.reduce((s, d) => s + d.households * d.share_exposed, 0) / total
+    const urgent = rows.filter((d) => d.share_exposed >= exposed + RULES.highAboveAverage).length
+    return { atRisk, urgent }
+  }, [vuln.data])
+
+  const tiles: { label: string; value: string; note?: string; icon: string; tone: 'green' | 'amber' | 'slate' }[] = []
+  if (kpis.data) tiles.push({ label: t('home.kpi.poverty', 'Households living in poverty'), value: `${kpis.data.povertyPct}%`, note: kpis.data.povertySource, icon: ICONS.home, tone: 'green' })
+  if (summary) tiles.push({ label: t('home.kpi.close', 'Families close to falling into poverty'), value: `${Math.round(summary.atRisk * 100)}%`, icon: ICONS.warn, tone: 'amber' })
+  if (summary) tiles.push({ label: t('home.kpi.urgent', 'Districts to act on soon'), value: String(summary.urgent), icon: ICONS.pin, tone: 'amber' })
+  if (kpis.data?.exclusionPct != null) tiles.push({ label: t('home.kpi.exclusion', 'Poor families not reached by support'), value: `${kpis.data.exclusionPct}%`, icon: ICONS.users, tone: 'slate' })
+  if (kpis.data) tiles.push({ label: t('home.kpi.scored', 'Households checked so far'), value: fmt.format(kpis.data.householdsScored), icon: ICONS.check, tone: 'slate' })
+
   const showOnMap = (code: string, nextLayer?: RiskLayer) => {
     setSelected(code)
     if (nextLayer) setLayer(nextLayer)
@@ -86,76 +119,100 @@ export default function Dashboard() {
     { key: 'double', label: t('home.layer.double', 'Poor and left out'), enabled: accessAvailable },
   ]
 
-  const tabs: { key: Tab; label: string; enabled: boolean }[] = [
-    { key: 'map', label: t('home.tab.map', 'Map'), enabled: true },
-    { key: 'alerts', label: t('home.tab.alerts', 'Early warnings'), enabled: vuln.data !== null },
-    { key: 'districts', label: t('home.tab.districts', 'All districts'), enabled: true },
+  const tabs: { key: Tab; label: string; enabled: boolean; icon: string }[] = [
+    { key: 'map', label: t('home.tab.map', 'Map'), enabled: true, icon: ICONS.pin },
+    { key: 'alerts', label: t('home.tab.alerts', 'Early warnings'), enabled: vuln.data !== null, icon: ICONS.bell },
+    { key: 'districts', label: t('home.tab.districts', 'All districts'), enabled: true, icon: ICONS.list },
   ]
 
-  const panel = 'rounded-xl border border-slate-200 bg-white p-5'
+  const panel = 'rounded-xl border border-slate-200 bg-white p-5 shadow-sm'
 
   return (
     <div className="space-y-8">
-      <header className="space-y-4">
-        <div>
-          <h1 className="text-3xl font-semibold tracking-tight text-slate-900">{t('home.title', 'Where is help needed most?')}</h1>
-          <p className="mt-2 max-w-2xl text-base leading-7 text-slate-600">
-            {t('home.subtitle', 'See which districts have the most families in need, and which are close to falling into poverty.')}
-          </p>
-        </div>
+      <section className="rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-white p-6 shadow-sm sm:p-8">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-medium text-emerald-800 ring-1 ring-emerald-200">
+          <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
+          {t('home.demoBadge', 'Demonstration data')}
+        </span>
+        <h1 className="mt-4 text-3xl font-semibold tracking-tight text-slate-900">{t('home.title', 'Where is help needed most?')}</h1>
+        <p className="mt-2 max-w-2xl text-base leading-7 text-slate-600">
+          {t('home.subtitle', 'See which districts have the most families in need, and which are close to falling into poverty.')}
+        </p>
         {topAtRisk && (
-          <div className="border-l-4 border-emerald-700 bg-white py-3 pl-4 pr-4">
-            <p className="text-base text-slate-900">
-              {t('home.topAtRisk', {
-                names: topAtRisk,
-                defaultValue: 'Most families who are poor or close to poverty live in: {{names}}.',
-              })}
-            </p>
-            <p className="mt-1 text-xs text-slate-500">{t('home.topAtRiskNote', 'Based on demonstration data. Always confirm with a home visit.')}</p>
-          </div>
+          <p className="mt-5 max-w-3xl rounded-lg border border-emerald-100 bg-white/80 px-4 py-3 text-base text-slate-900">
+            {t('home.topAtRisk', {
+              names: topAtRisk,
+              defaultValue: 'Most families who are poor or close to poverty live in: {{names}}.',
+            })}
+            <span className="mt-1 block text-xs text-slate-500">{t('home.topAtRiskNote', 'Based on demonstration data. Always confirm with a home visit.')}</span>
+          </p>
         )}
-        <details className="text-sm text-slate-600">
-          <summary className={`inline-block cursor-pointer rounded font-medium text-emerald-800 ${focus}`}>{t('home.guide.title', 'How to use this page')}</summary>
-          <ol className="mt-2 list-decimal space-y-1 pl-5">
-            <li>{t('home.guide.one', 'The four numbers give the big picture.')}</li>
+
+        {kpis.isError ? (
+          <div className="mt-6 rounded-lg bg-white p-3 ring-1 ring-slate-900/5">
+            <ErrorState title={t('dashboard.error')} detail={kpis.error.message} retryLabel={t('dashboard.retry')} onRetry={() => kpis.refetch()} />
+          </div>
+        ) : (
+          <dl aria-label={t('home.kpi.label', 'Key numbers')} className="mt-6 flex flex-wrap gap-3">
+            {kpis.isLoading
+              ? Array.from({ length: 4 }, (_, i) => <div key={i} className="h-28 min-w-[11rem] flex-1 animate-pulse rounded-xl bg-white/70 ring-1 ring-slate-900/5" />)
+              : tiles.map((x) => (
+                  <div key={x.label} className="min-w-[11rem] flex-1 rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-900/5">
+                    <dt className="flex items-center gap-2 text-sm text-slate-600">
+                      <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${TONES[x.tone]}`}>
+                        <Icon d={x.icon} />
+                      </span>
+                      {x.label}
+                    </dt>
+                    <dd className="mt-3 text-3xl font-semibold tabular-nums tracking-tight text-slate-900">{x.value}</dd>
+                    {x.note && <p className="mt-1 text-xs text-slate-400">{x.note}</p>}
+                  </div>
+                ))}
+          </dl>
+        )}
+      </section>
+
+      <div>
+        <div className="mb-5 flex items-end justify-between gap-4 border-b border-slate-300">
+          <div role="tablist" aria-label={t('home.tab.label', 'Dashboard sections')} className="flex gap-6">
+            {tabs.map((x) => (
+              <button
+                key={x.key}
+                id={`tab-${x.key}`}
+                role="tab"
+                type="button"
+                aria-selected={tab === x.key}
+                aria-controls={`panel-${x.key}`}
+                disabled={!x.enabled}
+                onClick={() => setTab(x.key)}
+                className={`-mb-px inline-flex items-center gap-2 rounded-t border-b-2 pb-3 text-sm font-medium disabled:cursor-not-allowed disabled:text-slate-300 ${focus} ${
+                  tab === x.key ? 'border-emerald-600 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-900'
+                }`}
+              >
+                <Icon d={x.icon} />
+                {x.label}
+              </button>
+            ))}
+          </div>
+          <button
+            type="button"
+            aria-expanded={help}
+            onClick={() => setHelp((v) => !v)}
+            className={`mb-2 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium text-emerald-800 hover:bg-emerald-50 ${focus}`}
+          >
+            <Icon d={ICONS.help} />
+            {t('home.guide.title', 'How to use this page')}
+          </button>
+        </div>
+
+        {help && (
+          <ol className="mb-5 list-decimal space-y-1 rounded-lg bg-white p-4 pl-9 text-sm text-slate-600 shadow-sm">
+            <li>{t('home.guide.one', 'The numbers at the top give the big picture.')}</li>
             <li>{t('home.guide.two', 'Use the Map tab to see where need is highest. Tap a district for details.')}</li>
             <li>{t('home.guide.three', 'Use Early warnings to see districts that need attention soon, with suggested next steps.')}</li>
             <li>{t('home.guide.four', 'Use All districts to search, filter and compare every district.')}</li>
           </ol>
-        </details>
-      </header>
-
-      {kpis.isError ? (
-        <ErrorState title={t('dashboard.error')} detail={kpis.error.message} retryLabel={t('dashboard.retry')} onRetry={() => kpis.refetch()} />
-      ) : (
-        <dl aria-label={t('home.kpi.label', 'Key numbers')} className="grid gap-px overflow-hidden rounded-xl border border-slate-200 bg-slate-200 sm:grid-cols-2 lg:grid-cols-4">
-          <Stat loading={kpis.isLoading} pending={pending} label={t('home.kpi.poverty', 'Households living in poverty')} value={kpis.data ? `${kpis.data.povertyPct}%` : null} note={kpis.data?.povertySource} />
-          <Stat loading={kpis.isLoading} pending={pending} label={t('home.kpi.exclusion', 'Poor families not reached by support')} value={kpis.data?.exclusionPct != null ? `${kpis.data.exclusionPct}%` : null} />
-          <Stat loading={kpis.isLoading} pending={pending} label={t('home.kpi.highRisk', 'Districts needing most attention')} value={kpis.data?.highRiskDistrictCount != null ? String(kpis.data.highRiskDistrictCount) : null} />
-          <Stat loading={kpis.isLoading} pending={pending} label={t('home.kpi.scored', 'Households checked so far')} value={kpis.data ? fmt.format(kpis.data.householdsScored) : null} />
-        </dl>
-      )}
-
-      <div>
-        <div role="tablist" aria-label={t('home.tab.label', 'Dashboard sections')} className="mb-5 flex gap-6 border-b border-slate-200">
-          {tabs.map((x) => (
-            <button
-              key={x.key}
-              id={`tab-${x.key}`}
-              role="tab"
-              type="button"
-              aria-selected={tab === x.key}
-              aria-controls={`panel-${x.key}`}
-              disabled={!x.enabled}
-              onClick={() => setTab(x.key)}
-              className={`-mb-px rounded-t border-b-2 pb-3 text-sm font-medium disabled:cursor-not-allowed disabled:text-slate-300 ${focus} ${
-                tab === x.key ? 'border-emerald-700 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-900'
-              }`}
-            >
-              {x.label}
-            </button>
-          ))}
-        </div>
+        )}
 
         {tab === 'map' && (
           <section id="panel-map" role="tabpanel" aria-labelledby="tab-map" className={panel}>
@@ -203,7 +260,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className="space-y-6">
-                  <div aria-live="polite" className="min-h-40 rounded-lg border border-slate-200 p-4 text-sm">
+                  <div aria-live="polite" className="min-h-40 rounded-lg bg-slate-50 p-4 text-sm">
                     {active ? (
                       <>
                         <div className="text-base font-semibold text-slate-900">{nameOf(active)}</div>
@@ -243,7 +300,7 @@ export default function Dashboard() {
                               <span className="font-medium tabular-nums text-slate-900">{d.povertyRate}%</span>
                             </span>
                             <span className="mt-1.5 block h-1 rounded bg-slate-100">
-                              <span className="block h-1 rounded bg-emerald-700" style={{ width: `${((d.povertyRate ?? 0) / maxPoverty) * 100}%` }} />
+                              <span className="block h-1 rounded bg-emerald-600" style={{ width: `${((d.povertyRate ?? 0) / maxPoverty) * 100}%` }} />
                             </span>
                           </button>
                         </li>
