@@ -46,7 +46,7 @@ export default function DistrictTable({ districts, lang, vulnByCode, onSelect }:
   const start = (current - 1) * PAGE_SIZE
   const visible = rows.slice(start, start + PAGE_SIZE)
 
-  const field = 'rounded-md border border-slate-300 bg-white px-2 py-1.5 text-sm'
+  const field = 'rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700'
 
   return (
     <div>
@@ -82,16 +82,16 @@ export default function DistrictTable({ districts, lang, vulnByCode, onSelect }:
       {rows.length === 0 ? (
         <p className="rounded-md bg-slate-50 p-4 text-sm text-slate-600">{t('home.table.none', 'No districts match your search.')}</p>
       ) : (
-        <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+        <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
           <table className="min-w-full text-sm">
-            <thead className="bg-slate-50 text-left text-slate-600">
+            <thead className="bg-slate-50 text-left font-medium text-slate-500">
               <tr>
-                <th className="px-3 py-2">{t('home.col.district', 'District')}</th>
-                <th className="px-3 py-2">{t('home.col.province', 'Province')}</th>
-                <th className="px-3 py-2 text-right">{t('home.col.people', 'People')}</th>
-                <th className="px-3 py-2 text-right">{t('home.col.poverty', 'In poverty')}</th>
-                {vulnByCode && <th className="px-3 py-2 text-right">{t('home.col.close', 'Close to poverty')}</th>}
-                <th className="px-3 py-2">{t('home.col.source', 'How we know')}</th>
+                <th className="px-4 py-3">{t('home.col.district', 'District')}</th>
+                <th className="px-4 py-3">{t('home.col.province', 'Province')}</th>
+                <th className="px-4 py-3 text-right">{t('home.col.people', 'People')}</th>
+                <th className="px-4 py-3 text-right">{t('home.col.poverty', 'In poverty')}</th>
+                {vulnByCode && <th className="px-4 py-3 text-right">{t('home.col.close', 'Close to poverty')}</th>}
+                <th className="px-4 py-3">{t('home.col.source', 'How we know')}</th>
               </tr>
             </thead>
             <tbody>
@@ -99,16 +99,16 @@ export default function DistrictTable({ districts, lang, vulnByCode, onSelect }:
                 const v = vulnByCode?.[d.code]
                 return (
                   <tr key={d.code} className="border-t border-slate-100 hover:bg-slate-50">
-                    <td className="px-3 py-2 font-medium">
-                      <button type="button" onClick={() => onSelect(d.code)} className="text-left underline-offset-2 hover:underline">
+                    <td className="px-4 py-3 font-medium">
+                      <button type="button" onClick={() => onSelect(d.code)} className="text-left text-emerald-800 underline-offset-2 hover:underline">
                         {nameOf(d)}
                       </button>
                     </td>
-                    <td className="px-3 py-2">{d.province}</td>
-                    <td className="px-3 py-2 text-right tabular-nums">{fmt.format(d.population)}</td>
-                    <td className="px-3 py-2 text-right tabular-nums">{d.povertyRate !== null && d.povertyRate !== undefined ? `${d.povertyRate}%` : pending}</td>
-                    {vulnByCode && <td className="px-3 py-2 text-right tabular-nums">{v ? `${Math.round(v.share_at_risk * 100)}%` : pending}</td>}
-                    <td className="px-3 py-2 text-slate-500">{t(`dashboard.source.${d.povertyRateSource}`)}</td>
+                    <td className="px-4 py-3">{d.province}</td>
+                    <td className="px-4 py-3 text-right tabular-nums">{fmt.format(d.population)}</td>
+                    <td className="px-4 py-3 text-right tabular-nums">{d.povertyRate !== null && d.povertyRate !== undefined ? `${d.povertyRate}%` : pending}</td>
+                    {vulnByCode && <td className="px-4 py-3 text-right tabular-nums">{v ? `${Math.round(v.share_at_risk * 100)}%` : pending}</td>}
+                    <td className="px-4 py-3 text-slate-500">{t(`dashboard.source.${d.povertyRateSource}`)}</td>
                   </tr>
                 )
               })}
@@ -128,11 +128,11 @@ export default function DistrictTable({ districts, lang, vulnByCode, onSelect }:
             })}
           </span>
           <div className="flex items-center gap-2">
-            <button type="button" disabled={current <= 1} onClick={() => setPage(current - 1)} className="rounded-md border border-slate-300 px-3 py-1.5 font-medium disabled:cursor-not-allowed disabled:text-slate-400">
+            <button type="button" disabled={current <= 1} onClick={() => setPage(current - 1)} className="rounded-lg border border-slate-300 bg-white px-3 py-2 font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700 disabled:cursor-not-allowed disabled:text-slate-300 disabled:hover:bg-white">
               {t('home.table.prev', 'Previous')}
             </button>
             <span className="tabular-nums">{t('home.table.pageOf', { page: current, pages, defaultValue: 'Page {{page}} of {{pages}}' })}</span>
-            <button type="button" disabled={current >= pages} onClick={() => setPage(current + 1)} className="rounded-md border border-slate-300 px-3 py-1.5 font-medium disabled:cursor-not-allowed disabled:text-slate-400">
+            <button type="button" disabled={current >= pages} onClick={() => setPage(current + 1)} className="rounded-lg border border-slate-300 bg-white px-3 py-2 font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700 disabled:cursor-not-allowed disabled:text-slate-300 disabled:hover:bg-white">
               {t('home.table.next', 'Next')}
             </button>
           </div>
