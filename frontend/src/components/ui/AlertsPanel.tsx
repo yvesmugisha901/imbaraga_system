@@ -44,8 +44,8 @@ export default function AlertsPanel({ data, nameFor, onSelect }: Props) {
   }, [data])
 
   return (
-    <section className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm" aria-labelledby="alerts-title">
-      <h2 id="alerts-title" className="text-lg font-semibold">
+    <section className="rounded-xl border border-slate-200 bg-white p-5" aria-labelledby="alerts-title">
+      <h2 id="alerts-title" className="text-lg font-semibold text-slate-900">
         {t('home.alerts.title', 'Early warnings')}
       </h2>
       <p className="mb-3 text-sm text-slate-600">
@@ -64,14 +64,14 @@ export default function AlertsPanel({ data, nameFor, onSelect }: Props) {
             return (
               <li
                 key={d.district_code}
-                className={`rounded-md border p-3 text-sm ${high ? 'border-red-200 bg-red-50 text-red-950' : 'border-amber-200 bg-amber-50 text-amber-950'}`}
+                className={`rounded-lg border border-l-4 border-slate-200 bg-white p-4 text-sm text-slate-700 ${high ? 'border-l-red-600' : 'border-l-amber-500'}`}
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="font-semibold">
+                  <div className="font-semibold text-slate-900">
                     {name}
                     {d.province ? <span className="ml-2 font-normal opacity-70">{d.province}</span> : null}
                   </div>
-                  <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${high ? 'bg-red-200' : 'bg-amber-200'}`}>
+                  <span className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${high ? 'border-red-200 text-red-800' : 'border-amber-200 text-amber-800'}`}>
                     {high ? t('home.alerts.high', 'Act soon') : t('home.alerts.watch', 'Keep watching')}
                   </span>
                 </div>
@@ -102,7 +102,7 @@ export default function AlertsPanel({ data, nameFor, onSelect }: Props) {
                   <button
                     type="button"
                     onClick={() => onSelect(d.district_code)}
-                    className="mt-2 text-sm font-medium underline underline-offset-2"
+                    className="mt-3 text-sm font-medium text-emerald-800 underline underline-offset-2"
                   >
                     {t('home.alerts.show', 'Show on the map')}
                   </button>
