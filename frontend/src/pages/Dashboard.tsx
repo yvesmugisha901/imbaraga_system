@@ -109,6 +109,31 @@ function FocusCard({
   )
 }
 
+const focus = 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700'
+
+function Note({ children }: { children: ReactNode }) {
+  return (
+    <p className="flex items-start gap-2 text-xs leading-5 text-slate-500">
+      <svg aria-hidden="true" viewBox="0 0 20 20" className="mt-0.5 h-3.5 w-3.5 shrink-0 fill-slate-400">
+        <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 3.5a1 1 0 110 2 1 1 0 010-2zM9 9h2v6H9V9z" />
+      </svg>
+      <span>{children}</span>
+    </p>
+  )
+}
+
+function Stat({ label, value, note, loading, pending }: { label: string; value: string | null; note?: string; loading: boolean; pending: string }) {
+  return (
+    <div className="bg-white px-5 py-4">
+      <dt className="text-sm text-slate-500">{label}</dt>
+      <dd className="mt-1 text-3xl font-semibold tabular-nums tracking-tight text-slate-900">
+        {loading ? <span className="block h-9 w-20 animate-pulse rounded bg-slate-200" /> : value ?? <span className="text-xl font-normal text-slate-400">{pending}</span>}
+      </dd>
+      {note && <p className="mt-1 text-xs text-slate-400">{note}</p>}
+    </div>
+  )
+}
+
 export default function Dashboard() {
   const { t, i18n } = useTranslation()
   const lang: 'en' | 'rw' = i18n.language === 'rw' ? 'rw' : 'en'
@@ -231,6 +256,17 @@ export default function Dashboard() {
             {t('home.topPoverty', { names: topPoverty, defaultValue: 'Poverty is highest in {{names}}.' })}
             <span className="mt-1 block text-xs text-slate-500">{t('home.topPovertyNote', 'Official NISR EICV7 2023/24 district figures. Always confirm with a home visit.')}</span>
           </p>
+        </div>
+        {topAtRisk && (
+          <div className="border-l-4 border-emerald-700 bg-white py-3 pl-4 pr-4">
+            <p className="text-base text-slate-900">
+              {t('home.topAtRisk', {
+                names: topAtRisk,
+                defaultValue: 'Most families who are poor or close to poverty live in: {{names}}.',
+              })}
+            </p>
+            <p className="mt-1 text-xs text-slate-500">{t('home.topAtRiskNote', 'Based on demonstration data. Always confirm with a home visit.')}</p>
+          </div>
         )}
 
         {kpis.isError ? (
