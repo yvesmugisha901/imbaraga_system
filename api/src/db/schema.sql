@@ -9,13 +9,41 @@ CREATE TABLE IF NOT EXISTS districts (
   population              INTEGER NOT NULL,          -- RPHC 2022
   density_per_km2         REAL,
   urban_pct               REAL,                      -- RPHC 2022
-  poverty_rate            REAL,                      -- % of individuals, EICV7 2024
-  poverty_rate_source     TEXT NOT NULL DEFAULT 'province_eicv7',  -- province_eicv7 | microdata | modelled
-  financial_access_rate   REAL,                      -- 0-100; NULL until sourced or modelled
+  poverty_rate            REAL,                      -- % of individuals, EICV7 2023/24
+  poverty_rate_source     TEXT NOT NULL DEFAULT 'province_eicv7',  -- province_eicv7 | official_eicv7 | microdata | modelled
+  financial_access_rate   REAL,                      -- 0-100; % formally served (banked + other formal); NULL until sourced or modelled
   access_source           TEXT NOT NULL DEFAULT 'pending',         -- pending | finscope | modelled
   exclusion_gap           REAL,
   risk_score              REAL,                      -- filled after model/aggregation
-  double_exclusion        INTEGER NOT NULL DEFAULT 0 CHECK (double_exclusion IN (0,1))
+  double_exclusion        INTEGER NOT NULL DEFAULT 0 CHECK (double_exclusion IN (0,1)),  -- poverty > 27.4% AND formal inclusion < 90%
+
+  -- Official NISR EICV7 district indicators (filled by seed.ts from district_estimates.csv).
+  -- Keep this block in sync with OFFICIAL_COLUMNS in seed.ts.
+  poverty_rate_modelled   REAL,                      -- old simulated estimate, kept for comparison only
+  poverty_eicv5           REAL,                      -- % poor, EICV5 2016/17
+  poverty_change_points   REAL,                      -- EICV7 minus EICV5, percentage points
+  rank_official           INTEGER,                   -- 1 = highest official poverty rate
+  access_index            REAL,                      -- mean of water, sanitation, electricity, mobile phone (%)
+  high_poverty_low_access INTEGER NOT NULL DEFAULT 0 CHECK (high_poverty_low_access IN (0,1)),
+  dependency_ratio        REAL,
+  econ_dependency         REAL,
+  agri_workers_pct        REAL,
+  no_livestock_pct        REAL,
+  land_below_half_ha_pct  REAL,
+  neet_pct                REAL,
+  youth_literacy_pct      REAL,
+  improved_water_pct      REAL,
+  improved_sanitation_pct REAL,
+  electricity_pct         REAL,
+  mobile_phone_pct        REAL,
+  smartphone_pct          REAL,
+  cement_floor_pct        REAL,
+
+  -- FinScope 2024 financial access strand by district (% of adults 16+; rounded, may sum to 99-101)
+  banked_pct              REAL,
+  other_formal_pct        REAL,                      -- formal non-bank, mostly mobile money and SACCOs
+  informal_only_pct       REAL,
+  excluded_pct            REAL
 );
 
 CREATE TABLE IF NOT EXISTS households_demo (

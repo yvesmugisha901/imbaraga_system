@@ -1,31 +1,31 @@
-district_code,district_name_en,province,urban_pct,poverty_rate_est,poverty_rate_source,province_rate_eicv7
-nyarugenge,Nyarugenge,Kigali City,84.4,9.3,modelled,9.1
-gasabo,Gasabo,Kigali City,81.2,9.5,modelled,9.1
-kicukiro,Kicukiro,Kigali City,99.1,8.3,modelled,9.1
-nyanza,Nyanza,South,9.2,35.7,modelled,34.7
-gisagara,Gisagara,South,3.4,36.9,modelled,34.7
-nyaruguru,Nyaruguru,South,2.4,37.1,modelled,34.7
-huye,Huye,South,20.9,33.5,modelled,34.7
-nyamagabe,Nyamagabe,South,10.9,35.4,modelled,34.7
-ruhango,Ruhango,South,10.9,35.4,modelled,34.7
-muhanga,Muhanga,South,24.3,32.9,modelled,34.7
-kamonyi,Kamonyi,South,31.6,31.6,modelled,34.7
-karongi,Karongi,West,9.0,39.9,modelled,37.4
-rutsiro,Rutsiro,West,5.6,40.6,modelled,37.4
-rubavu,Rubavu,West,53.9,31.4,modelled,37.4
-nyabihu,Nyabihu,West,24.5,36.9,modelled,37.4
-ngororero,Ngororero,West,4.9,40.7,modelled,37.4
-rusizi,Rusizi,West,33.4,35.2,modelled,37.4
-nyamasheke,Nyamasheke,West,7.7,40.2,modelled,37.4
-rulindo,Rulindo,North,10.6,21.0,modelled,20.2
-gakenke,Gakenke,North,4.0,21.9,modelled,20.2
-musanze,Musanze,North,49.2,16.2,modelled,20.2
-burera,Burera,North,9.9,21.1,modelled,20.2
-gicumbi,Gicumbi,North,6.3,21.6,modelled,20.2
-rwamagana,Rwamagana,East,37.1,24.2,modelled,26.8
-nyagatare,Nyagatare,East,24.1,26.2,modelled,26.8
-gatsibo,Gatsibo,East,10.0,28.6,modelled,26.8
-kayonza,Kayonza,East,14.2,27.9,modelled,26.8
-kirehe,Kirehe,East,6.3,29.2,modelled,26.8
-ngoma,Ngoma,East,9.2,28.7,modelled,26.8
-bugesera,Bugesera,East,40.1,23.7,modelled,26.8
+district_code,district_name_en,province,urban_pct,poverty_rate_est,poverty_rate_modelled,province_rate_eicv7,poverty_eicv5,poverty_change_points,rank_official,access_index,high_poverty_low_access,dependency_ratio,econ_dependency,agri_workers_pct,no_livestock_pct,land_below_half_ha_pct,neet_pct,youth_literacy_pct,improved_water_pct,improved_sanitation_pct,electricity_pct,mobile_phone_pct,smartphone_pct,cement_floor_pct,banked_pct,other_formal_pct,informal_only_pct,excluded_pct,financial_access_rate,access_source,double_exclusion,poverty_rate_source
+nyarugenge,Nyarugenge,Kigali City,84.4,6.8,9.3,9.1,11.62,-4.82,30,97.1,False,55.11,110.1,11.3,15.8,69.4,22.7,92.9,99.4,100.0,94.75,94.06,68.96,83.91,59,40,0,1,99,finscope,False,Official NISR figure
+gasabo,Gasabo,Kigali City,81.2,11.1,9.5,9.1,18.1,-7.04,28,95.4,False,61.55,110.68,16.82,18.99,80.98,24.64,93.5,96.27,100.0,88.72,96.51,66.95,81.15,51,46,2,1,97,finscope,False,Official NISR figure
+kicukiro,Kicukiro,Kigali City,99.1,6.9,8.3,9.1,8.19,-1.27,29,97.7,False,52.18,105.87,7.9,13.38,28.81,20.89,95.8,99.66,98.9,94.74,97.63,73.66,90.01,62,35,2,2,97,finscope,False,Official NISR figure
+nyanza,Nyanza,South,9.2,43.3,35.7,34.7,46.86,-3.58,4,78.4,True,80.0,114.77,76.87,39.2,65.69,34.19,79.0,89.14,84.51,62.6,77.41,20.97,27.18,17,74,4,4,91,finscope,False,Official NISR figure
+gisagara,Gisagara,South,3.4,45.6,36.9,34.7,59.51,-13.87,2,74.8,True,86.0,102.07,82.91,34.76,85.2,38.92,81.6,98.53,82.62,50.3,67.8,15.1,17.75,10,77,9,4,87,finscope,True,Official NISR figure
+nyaruguru,Nyaruguru,South,2.4,39.7,37.1,34.7,52.58,-12.88,7,82.5,False,87.0,97.68,78.62,35.18,76.69,41.8,84.0,85.97,98.21,70.7,75.25,18.42,15.54,6,78,5,10,84,finscope,True,Official NISR figure
+huye,Huye,South,20.9,24.2,33.5,34.7,39.45,-15.26,16,86.7,False,75.0,99.78,62.25,30.43,85.29,32.18,90.7,97.93,99.17,70.6,79.01,30.19,38.39,15,73,6,6,88,finscope,False,Official NISR figure
+nyamagabe,Nyamagabe,South,10.9,51.4,35.4,34.7,67.57,-16.18,1,75.9,True,75.0,96.04,83.14,37.66,76.2,32.99,86.7,81.56,92.53,58.2,71.42,15.06,17.9,11,84,4,1,95,finscope,False,Official NISR figure
+ruhango,Ruhango,South,10.9,15.0,35.4,34.7,26.17,-11.18,24,81.5,False,78.0,94.0,69.49,33.74,68.82,35.72,89.0,90.47,90.57,69.2,75.71,21.84,35.45,22,70,5,3,92,finscope,False,Official NISR figure
+muhanga,Muhanga,South,24.3,15.0,32.9,34.7,33.24,-18.29,25,84.7,False,70.0,92.3,62.77,22.29,76.32,31.12,89.5,92.42,96.0,67.5,82.77,28.98,42.39,17,76,5,2,93,finscope,False,Official NISR figure
+kamonyi,Kamonyi,South,31.6,39.7,31.6,34.7,52.95,-13.26,7,80.6,True,74.0,114.47,63.09,25.04,69.48,30.88,84.7,89.25,86.17,62.5,84.28,29.12,41.31,16,76,4,3,92,finscope,False,Official NISR figure
+karongi,Karongi,West,9.0,38.2,39.9,37.4,52.96,-14.77,10,82.2,False,80.03,96.56,76.54,32.08,66.83,31.54,88.1,78.52,98.1,67.8,84.26,25.89,23.62,8,83,6,3,91,finscope,False,Official NISR figure
+rutsiro,Rutsiro,West,5.6,40.8,40.6,37.4,59.86,-19.08,6,78.1,True,79.77,94.72,73.43,36.85,91.53,26.31,82.5,63.82,95.3,71.1,82.26,20.53,22.52,9,78,6,6,87,finscope,True,Official NISR figure
+rubavu,Rubavu,West,53.9,38.8,31.4,37.4,49.19,-10.38,9,86.2,False,80.3,139.25,42.1,25.97,91.13,26.27,86.9,95.79,89.5,74.5,85.04,43.35,44.3,22,71,4,3,93,finscope,False,Official NISR figure
+nyabihu,Nyabihu,West,24.5,20.2,36.9,37.4,39.63,-19.42,22,78.8,False,78.94,103.6,67.92,36.96,84.44,22.13,85.7,82.44,86.4,60.6,85.58,26.05,25.26,13,74,5,8,87,finscope,False,Official NISR figure
+ngororero,Ngororero,West,4.9,30.2,40.7,37.4,44.42,-14.17,14,82.1,False,82.92,94.93,71.24,26.72,75.42,37.32,89.3,82.78,95.0,68.0,82.43,19.4,19.72,10,78,5,7,88,finscope,True,Official NISR figure
+rusizi,Rusizi,West,33.4,44.2,35.2,37.4,59.03,-14.87,3,90.7,False,87.23,118.68,60.93,33.94,80.89,32.23,92.0,94.24,99.4,78.8,90.44,40.59,25.1,22,68,5,6,90,finscope,False,Official NISR figure
+nyamasheke,Nyamasheke,West,7.7,42.8,40.2,37.4,53.56,-10.75,5,86.9,False,88.76,123.43,72.03,37.66,85.06,32.96,87.6,88.02,97.8,74.3,87.37,29.8,26.67,13,78,3,6,91,finscope,False,Official NISR figure
+rulindo,Rulindo,North,10.6,21.6,21.0,20.2,35.22,-13.58,20,83.5,False,77.8,90.0,66.0,32.22,75.92,28.07,89.9,87.44,92.8,67.21,86.36,28.99,32.21,13,74,4,8,87,finscope,False,Official NISR figure
+gakenke,Gakenke,North,4.0,24.5,21.9,20.2,36.69,-12.21,15,81.4,False,76.3,79.0,75.77,29.7,80.92,28.63,88.8,84.14,93.0,67.15,81.43,22.78,18.83,18,69,5,8,87,finscope,False,Official NISR figure
+musanze,Musanze,North,49.2,21.0,16.2,20.2,42.3,-21.32,21,87.4,False,73.8,103.0,47.36,32.32,85.51,23.74,88.8,91.75,96.3,72.89,88.51,38.45,37.02,24,71,5,1,95,finscope,False,Official NISR figure
+burera,Burera,North,9.9,22.0,21.1,20.2,25.49,-3.46,19,83.6,False,80.81,112.0,78.89,35.37,85.9,22.95,87.5,90.56,93.6,67.4,82.95,23.08,15.03,11,87,2,1,98,finscope,False,Official NISR figure
+gicumbi,Gicumbi,North,6.3,13.3,21.6,20.2,24.59,-11.28,27,85.6,False,76.9,84.0,77.43,30.8,84.42,36.67,90.1,99.19,98.6,61.53,83.14,27.57,23.44,8,75,11,7,83,finscope,False,Official NISR figure
+rwamagana,Rwamagana,East,37.1,23.8,24.2,26.8,29.6,-5.8,17,88.1,False,72.45,118.97,52.99,30.71,67.6,26.48,86.1,93.7,93.6,80.37,84.53,39.21,46.15,27,68,3,2,95,finscope,False,Official NISR figure
+nyagatare,Nyagatare,East,24.1,36.4,26.2,26.8,48.6,-12.2,12,82.1,False,82.69,135.17,75.04,37.63,46.07,25.67,84.7,87.26,92.9,64.36,84.01,26.63,37.8,17,77,4,3,94,finscope,False,Official NISR figure
+gatsibo,Gatsibo,East,10.0,18.4,28.6,26.8,38.0,-19.6,23,82.0,False,81.95,116.11,71.62,38.46,70.96,29.11,84.1,86.98,94.5,63.93,82.6,25.74,28.58,23,73,3,1,96,finscope,False,Official NISR figure
+kayonza,Kayonza,East,14.2,36.6,27.9,26.8,51.0,-14.4,11,84.4,False,82.12,116.58,71.61,38.58,44.29,23.15,86.3,89.41,94.7,70.74,82.63,28.78,28.26,11,76,8,5,87,finscope,True,Official NISR figure
+kirehe,Kirehe,East,6.3,14.2,29.2,26.8,26.0,-11.8,26,85.6,False,82.05,93.36,79.4,34.96,52.7,30.12,86.0,86.42,95.9,75.55,84.47,25.37,35.55,7,86,5,3,93,finscope,False,Official NISR figure
+ngoma,Ngoma,East,9.2,30.9,28.7,26.8,34.0,-3.1,13,79.1,True,82.86,89.77,85.66,35.49,58.75,31.06,78.4,74.99,91.2,71.28,79.1,25.13,26.88,9,77,6,8,86,finscope,True,Official NISR figure
+bugesera,Bugesera,East,40.1,23.7,23.7,26.8,40.8,-17.1,18,86.2,False,81.9,116.71,55.62,34.57,61.77,23.66,84.1,87.69,94.5,75.04,87.46,42.79,58.2,23,71,5,2,94,finscope,False,Official NISR figure

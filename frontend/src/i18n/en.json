@@ -25,10 +25,11 @@
     "loading": "Loading…",
     "retry": "Try again",
     "error": "Could not load data",
-    "source": {
+        "source": {
       "province_eicv7": "Province rate (EICV7)",
       "microdata": "EICV7 microdata",
-      "modelled": "Modelled estimate"
+      "modelled": "Modelled estimate",
+      "official_eicv7": "Official NISR figure (EICV7)"
     }
   },
   "table": {

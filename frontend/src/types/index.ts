@@ -9,7 +9,7 @@ export interface District {
   densityPerKm2: number | null
   urbanPct: number | null
   povertyRate: number | null
-  povertyRateSource: 'province_eicv7' | 'microdata' | 'modelled'
+  povertyRateSource: 'province_eicv7' | 'official_eicv7' | 'microdata' | 'modelled'
   financialAccessRate: number | null
   accessSource: 'pending' | 'finscope' | 'modelled'
   exclusionGap: number | null
