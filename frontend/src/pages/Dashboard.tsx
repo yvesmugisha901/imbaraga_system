@@ -1,52 +1,68 @@
-import { useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useDistricts, useGeoJson, useKpis } from '../api/hooks'
-import { useVulnerability } from '../api/useVulnerability'
 import ErrorState from '../components/ui/ErrorState'
-import AlertsPanel from '../components/ui/AlertsPanel'
-import { RULES } from '../utils/alertRules'
 import DistrictTable from '../components/ui/DistrictTable'
+import DistrictProfile from '../components/ui/DistrictProfile'
+import SectionNav, { type NavItem } from '../components/dashboard/SectionNav'
+import PriorityTable from '../components/dashboard/PriorityTable'
+import ProgressChart from '../components/dashboard/ProgressChart'
+import DriversChart from '../components/dashboard/DriversChart'
 import RiskMap, { type RiskLayer } from '../components/charts/RiskMap'
+import { accessGapPct, doubleClass } from '../utils/officialLayers'
 import type { District } from '../types'
 
-type Tab = 'map' | 'alerts' | 'districts'
-
 const focus = 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700'
+const font = { fontFamily: 'Inter, "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif' }
 
-function Note({ children }: { children: ReactNode }) {
+/** A section whose body can be folded away. Closed sections show only a title and a one-line summary. */
+function Block({ id, offset, title, summary, open, onToggle, children }: {
+  id: string; offset: number; title: string; summary?: string; open: boolean; onToggle: (id: string) => void; children: ReactNode
+}) {
   return (
-    <p className="flex items-start gap-2 text-xs leading-5 text-slate-500">
-      <svg aria-hidden="true" viewBox="0 0 20 20" className="mt-0.5 h-3.5 w-3.5 shrink-0 fill-slate-400">
-        <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 3.5a1 1 0 110 2 1 1 0 010-2zM9 9h2v6H9V9z" />
-      </svg>
-      <span>{children}</span>
-    </p>
+    <section id={id} aria-labelledby={`${id}-h`} style={{ scrollMarginTop: offset + 8 }} className="rounded-lg border border-slate-200 bg-white">
+      <h2 id={`${id}-h`} className="m-0">
+        <button type="button" aria-expanded={open} aria-controls={`${id}-body`} onClick={() => onToggle(id)} className={`flex w-full items-center justify-between gap-4 rounded-lg px-4 py-3 text-left ${focus}`}>
+          <span>
+            <span className="block text-base font-semibold text-slate-900">{title}</span>
+            {summary && <span className="mt-0.5 block text-sm font-normal text-slate-500">{summary}</span>}
+          </span>
+          <svg aria-hidden="true" viewBox="0 0 20 20" className={`h-4 w-4 shrink-0 fill-none stroke-slate-500 transition-transform ${open ? 'rotate-180' : ''}`} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 8l5 5 5-5" /></svg>
+        </button>
+      </h2>
+      {open && <div id={`${id}-body`} className="border-t border-slate-200 p-4">{children}</div>}
+    </section>
   )
 }
 
-const ICONS = {
-  home: 'M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1v-9z',
-  warn: 'M12 3l10 18H2L12 3zM12 10v5M12 18v.01',
-  pin: 'M12 21s7-6.2 7-11a7 7 0 10-14 0c0 4.8 7 11 7 11zM12 12.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z',
-  check: 'M5 13l4 4L19 7',
-  users: 'M16 20v-1a4 4 0 00-4-4H7a4 4 0 00-4 4v1M9.5 11a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM21 20v-1a4 4 0 00-3-3.9',
-  bell: 'M6 8a6 6 0 1112 0c0 7 3 9 3 9H3s3-2 3-9zM10 20a2 2 0 004 0',
-  list: 'M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01',
-  help: 'M9.5 9a2.5 2.5 0 114 2c-.9.6-1.5 1.1-1.5 2M12 17v.01M12 3a9 9 0 100 18 9 9 0 000-18z',
-}
-
-const TONES = {
-  green: 'bg-emerald-50 text-emerald-700',
-  amber: 'bg-amber-50 text-amber-700',
-  slate: 'bg-slate-100 text-slate-600',
-}
-
-function Icon({ d }: { d: string }) {
+/** Small stat card. The explanation appears on hover or keyboard focus, not by default. */
+function Stat({ label, value, tip }: { label: string; value: string; tip?: string }) {
   return (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4 shrink-0 fill-none stroke-current" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d={d} />
-    </svg>
+    <div tabIndex={tip ? 0 : undefined} className={`group relative rounded-lg border border-slate-200 bg-white px-4 py-3 ${focus}`}>
+      <dt className="text-xs text-slate-500">{label}</dt>
+      <dd className="mt-1 text-2xl font-semibold tabular-nums text-slate-900">{value}</dd>
+      {tip && (
+        <span role="tooltip" className="pointer-events-none absolute left-0 top-full z-20 mt-1 hidden w-60 rounded-md bg-slate-900 px-3 py-2 text-xs leading-5 text-white shadow-lg group-hover:block group-focus:block">
+          {tip}
+        </span>
+      )}
+    </div>
   )
+}
+
+function useHeaderHeight() {
+  const [h, setH] = useState(0)
+  useEffect(() => {
+    const header = document.querySelector('header')
+    if (!header) return
+    const measure = () => setH(Math.round(header.getBoundingClientRect().height))
+    measure()
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(measure) : null
+    ro?.observe(header)
+    window.addEventListener('resize', measure)
+    return () => { ro?.disconnect(); window.removeEventListener('resize', measure) }
+  }, [])
+  return h
 }
 
 export default function Dashboard() {
@@ -55,295 +71,173 @@ export default function Dashboard() {
   const kpis = useKpis()
   const districts = useDistricts()
   const geo = useGeoJson()
-  const vuln = useVulnerability()
   const fmt = new Intl.NumberFormat(lang === 'rw' ? 'en-RW' : 'en-US')
-  const pending = t('dashboard.pending')
+  const offset = useHeaderHeight()
 
-  const [tab, setTab] = useState<Tab>('map')
   const [layer, setLayer] = useState<RiskLayer>('poverty')
   const [hover, setHover] = useState<string | null>(null)
   const [selected, setSelected] = useState<string | null>(null)
-  const [help, setHelp] = useState(false)
+  const [open, setOpen] = useState<Record<string, boolean>>({ focus: true, map: true })
+  const toggle = (id: string) => setOpen((o) => ({ ...o, [id]: !o[id] }))
 
-  const list = districts.data ?? []
-  const sorted = useMemo(() => [...list].sort((a, b) => (b.povertyRate ?? 0) - (a.povertyRate ?? 0)), [list])
-  const maxPoverty = sorted[0]?.povertyRate ?? 1
-  const accessAvailable = list.some((d) => d.exclusionGap !== null)
+  const list = useMemo(() => districts.data ?? [], [districts.data])
+  const sorted = useMemo(() => [...list].filter((d) => d.povertyRate != null).sort((a, b) => (b.povertyRate ?? 0) - (a.povertyRate ?? 0)), [list])
   const nameOf = (d: District) => (lang === 'rw' && d.nameRw ? d.nameRw : d.nameEn)
 
   const activeCode = hover ?? selected
   const active = list.find((d) => d.code === activeCode)
-  const activeVuln = active ? vuln.byCode?.[active.code] : undefined
+  const picked = list.find((d) => d.code === selected)
 
-  const topAtRisk = useMemo(() => {
-    if (!vuln.data) return null
-    return vuln.data.districts
-      .slice(0, 3)
-      .map((v) => {
-        const d = list.find((x) => x.code === v.district_code)
-        return d ? nameOf(d) : v.district_name_en ?? v.district_code
-      })
-      .join(', ')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [vuln.data, list, lang])
+  const accessAvailable = useMemo(() => list.some((d) => accessGapPct(d) !== null), [list])
+  const doubleAvailable = useMemo(() => list.some((d) => doubleClass(d) !== null), [list])
+  const hasProgress = useMemo(() => list.some((d) => d.povertyEicv5 != null && d.povertyRate != null), [list])
+  const hasDrivers = useMemo(() => list.some((d) => d.indicators != null), [list])
 
-  // National summary from the vulnerability file (replaces cards that used to say "Pending").
-  const summary = useMemo(() => {
-    if (!vuln.data) return null
-    const rows = vuln.data.districts
-    const total = rows.reduce((s, d) => s + d.households, 0) || 1
-    const atRisk = rows.reduce((s, d) => s + d.households * d.share_at_risk, 0) / total
-    const exposed = rows.reduce((s, d) => s + d.households * d.share_exposed, 0) / total
-    const urgent = rows.filter((d) => d.share_exposed >= exposed + RULES.highAboveAverage).length
-    return { atRisk, urgent }
-  }, [vuln.data])
+  const flaggedCount = useMemo(() => list.filter((d) => d.highPovertyLowAccess || d.doubleExclusionFlag).length, [list])
+  const bothCount = useMemo(() => list.filter((d) => d.highPovertyLowAccess && d.doubleExclusionFlag).length, [list])
 
-  const tiles: { label: string; value: string; note?: string; icon: string; tone: 'green' | 'amber' | 'slate' }[] = []
-  if (kpis.data) tiles.push({ label: t('home.kpi.poverty', 'Households living in poverty'), value: `${kpis.data.povertyPct}%`, note: kpis.data.povertySource, icon: ICONS.home, tone: 'green' })
-  if (summary) tiles.push({ label: t('home.kpi.close', 'Families close to falling into poverty'), value: `${Math.round(summary.atRisk * 100)}%`, icon: ICONS.warn, tone: 'amber' })
-  if (summary) tiles.push({ label: t('home.kpi.urgent', 'Districts to act on soon'), value: String(summary.urgent), icon: ICONS.pin, tone: 'amber' })
-  if (kpis.data?.exclusionPct != null) tiles.push({ label: t('home.kpi.exclusion', 'Poor families not reached by support'), value: `${kpis.data.exclusionPct}%`, icon: ICONS.users, tone: 'slate' })
-  if (kpis.data) tiles.push({ label: t('home.kpi.scored', 'Households checked so far'), value: fmt.format(kpis.data.householdsScored), icon: ICONS.check, tone: 'slate' })
+  const stats = useMemo(() => {
+    if (!sorted.length) return null
+    const changes = list.map((d) => d.povertyChangePoints).filter((v): v is number => v != null)
+    return {
+      hi: sorted[0], lo: sorted[sorted.length - 1],
+      fell: changes.filter((c) => c < 0).length, n: changes.length,
+      avg: changes.length ? changes.reduce((a, b) => a + b, 0) / changes.length : null,
+    }
+  }, [list, sorted])
 
-  const showOnMap = (code: string, nextLayer?: RiskLayer) => {
+  const national = kpis.data?.povertyPct
+  const above = national != null ? list.filter((d) => (d.povertyRate ?? 0) > national).length : null
+
+  const stat: { label: string; value: string; tip?: string }[] = []
+  if (national != null) stat.push({ label: t('home.kpi.povertyPeople', 'People living in poverty'), value: `${national}%`, tip: above != null ? t('home.kpi.aboveTip', { defaultValue: 'National rate, 2023/24. {{a}} of {{n}} districts are above it.', a: above, n: list.length }) : undefined })
+  if (stats?.hi.povertyRate != null) stat.push({ label: t('home.kpi.highest', 'Highest district'), value: `${stats.hi.povertyRate.toFixed(1)}%`, tip: `${nameOf(stats.hi)}. ${t('home.kpi.lowest', 'Lowest')}: ${nameOf(stats.lo)}, ${stats.lo.povertyRate?.toFixed(1)}%.` })
+  if (stats && stats.n > 0) stat.push({ label: t('home.kpi.fell', 'Districts with lower poverty than 2016/17'), value: `${stats.fell} of ${stats.n}`, tip: stats.avg != null ? t('home.kpi.fellNote', { defaultValue: 'Average change {{pts}} points', pts: `\u2212${Math.abs(stats.avg).toFixed(1)}` }) : undefined })
+  if (flaggedCount > 0) stat.push({ label: t('home.kpi.flagged', 'Districts needing extra attention'), value: String(flaggedCount), tip: t('home.kpi.flaggedNote', { defaultValue: '{{n}} flagged on both services and finance', n: bothCount }) })
+
+  const showOnMap = (code: string) => {
     setSelected(code)
-    if (nextLayer) setLayer(nextLayer)
-    setTab('map')
-    window.scrollTo({ top: 0, behavior: 'smooth' })
+    setOpen((o) => ({ ...o, map: true }))
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    requestAnimationFrame(() => document.getElementById('map')?.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }))
   }
 
   const layers: { key: RiskLayer; label: string; enabled: boolean }[] = [
-    { key: 'poverty', label: t('home.layer.poverty', 'Where poverty is highest'), enabled: true },
-    { key: 'vulnerability', label: t('home.layer.vulnerability', 'Families close to poverty'), enabled: vuln.byCode !== null },
-    { key: 'access', label: t('home.layer.access', 'Where support is missing'), enabled: accessAvailable },
-    { key: 'double', label: t('home.layer.double', 'Poor and left out'), enabled: accessAvailable },
+    { key: 'poverty', label: t('home.layer.poverty', 'Poverty'), enabled: true },
+    { key: 'access', label: t('home.layer.access', 'Missing support'), enabled: accessAvailable },
+    { key: 'double', label: t('home.layer.double', 'Poor and left out'), enabled: doubleAvailable },
   ]
+  const layerNote =
+    layer === 'poverty' ? t('home.povertyLayerNote', 'Official NISR EICV7 2023/24 poverty rate for each district.')
+    : layer === 'access' ? t('home.accessLayerNote', 'Share of adults not using formal financial services, from FinScope 2024.')
+    : t('home.doubleLayerNote', 'Districts flagged on high poverty with low services, high poverty with low financial access, or both.')
 
-  const tabs: { key: Tab; label: string; enabled: boolean; icon: string }[] = [
-    { key: 'map', label: t('home.tab.map', 'Map'), enabled: true, icon: ICONS.pin },
-    { key: 'alerts', label: t('home.tab.alerts', 'Early warnings'), enabled: vuln.data !== null, icon: ICONS.bell },
-    { key: 'districts', label: t('home.tab.districts', 'All districts'), enabled: true, icon: ICONS.list },
-  ]
+  const navItems = useMemo<NavItem[]>(
+    () => [
+      ...(flaggedCount > 0 ? [{ id: 'focus', label: t('nav.focus', 'Where to focus') }] : []),
+      { id: 'map', label: t('nav.map', 'Map') },
+      ...(hasProgress ? [{ id: 'progress', label: t('nav.progress', 'Progress') }] : []),
+      ...(hasDrivers ? [{ id: 'drivers', label: t('nav.drivers', 'Drivers') }] : []),
+      { id: 'districts', label: t('nav.districts', 'All districts') },
+      { id: 'sources', label: t('nav.sources', 'Sources') },
+    ],
+    [t, flaggedCount, hasProgress, hasDrivers],
+  )
 
-  const panel = 'rounded-xl border border-slate-200 bg-white p-5 shadow-sm'
+  const loading = kpis.isLoading || districts.isLoading
 
   return (
-    <div className="space-y-8">
-      <section className="rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 via-white to-white p-6 shadow-sm sm:p-8">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-white px-3 py-1 text-xs font-medium text-emerald-800 ring-1 ring-emerald-200">
-          <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-emerald-600" />
-          {t('home.demoBadge', 'Demonstration data')}
-        </span>
-        <h1 className="mt-4 text-3xl font-semibold tracking-tight text-slate-900">{t('home.title', 'Where is help needed most?')}</h1>
-        <p className="mt-2 max-w-2xl text-base leading-7 text-slate-600">
-          {t('home.subtitle', 'See which districts have the most families in need, and which are close to falling into poverty.')}
-        </p>
-        {topAtRisk && (
-          <p className="mt-5 max-w-3xl rounded-lg border border-emerald-100 bg-white/80 px-4 py-3 text-base text-slate-900">
-            {t('home.topAtRisk', {
-              names: topAtRisk,
-              defaultValue: 'Most families who are poor or close to poverty live in: {{names}}.',
-            })}
-            <span className="mt-1 block text-xs text-slate-500">{t('home.topAtRiskNote', 'Based on demonstration data. Always confirm with a home visit.')}</span>
-          </p>
-        )}
+    <div className="space-y-6" style={font}>
+      <SectionNav items={navItems} offset={offset} label={t('nav.label', 'Dashboard sections')} onNavigate={(id) => setOpen((o) => ({ ...o, [id]: true }))} />
 
-        {kpis.isError ? (
-          <div className="mt-6 rounded-lg bg-white p-3 ring-1 ring-slate-900/5">
-            <ErrorState title={t('dashboard.error')} detail={kpis.error.message} retryLabel={t('dashboard.retry')} onRetry={() => kpis.refetch()} />
-          </div>
-        ) : (
-          <dl aria-label={t('home.kpi.label', 'Key numbers')} className="mt-6 flex flex-wrap gap-3">
-            {kpis.isLoading
-              ? Array.from({ length: 4 }, (_, i) => <div key={i} className="h-28 min-w-[11rem] flex-1 animate-pulse rounded-xl bg-white/70 ring-1 ring-slate-900/5" />)
-              : tiles.map((x) => (
-                  <div key={x.label} className="min-w-[11rem] flex-1 rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-900/5">
-                    <dt className="flex items-center gap-2 text-sm text-slate-600">
-                      <span className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${TONES[x.tone]}`}>
-                        <Icon d={x.icon} />
-                      </span>
-                      {x.label}
-                    </dt>
-                    <dd className="mt-3 text-3xl font-semibold tabular-nums tracking-tight text-slate-900">{x.value}</dd>
-                    {x.note && <p className="mt-1 text-xs text-slate-400">{x.note}</p>}
-                  </div>
-                ))}
-          </dl>
-        )}
-      </section>
+      <header>
+        <h1 className="text-2xl font-semibold tracking-tight text-slate-900 sm:text-3xl">{t('home.title', 'Where is help needed most?')}</h1>
+        <p className="mt-1 text-sm text-slate-600">{t('home.byline', 'Official poverty data for all 30 districts of Rwanda. NISR EICV7 2023/24 and FinScope 2024.')}</p>
+      </header>
 
-      <div>
-        <div className="mb-5 flex items-end justify-between gap-4 border-b border-slate-300">
-          <div role="tablist" aria-label={t('home.tab.label', 'Dashboard sections')} className="flex gap-6">
-            {tabs.map((x) => (
-              <button
-                key={x.key}
-                id={`tab-${x.key}`}
-                role="tab"
-                type="button"
-                aria-selected={tab === x.key}
-                aria-controls={`panel-${x.key}`}
-                disabled={!x.enabled}
-                onClick={() => setTab(x.key)}
-                className={`-mb-px inline-flex items-center gap-2 rounded-t border-b-2 pb-3 text-sm font-medium disabled:cursor-not-allowed disabled:text-slate-300 ${focus} ${
-                  tab === x.key ? 'border-emerald-600 text-slate-900' : 'border-transparent text-slate-500 hover:text-slate-900'
-                }`}
-              >
-                <Icon d={x.icon} />
-                {x.label}
-              </button>
-            ))}
-          </div>
-          <button
-            type="button"
-            aria-expanded={help}
-            onClick={() => setHelp((v) => !v)}
-            className={`mb-2 inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-sm font-medium text-emerald-800 hover:bg-emerald-50 ${focus}`}
-          >
-            <Icon d={ICONS.help} />
-            {t('home.guide.title', 'How to use this page')}
-          </button>
+      {kpis.isError ? (
+        <ErrorState title={t('dashboard.error')} detail={kpis.error.message} retryLabel={t('dashboard.retry')} onRetry={() => kpis.refetch()} />
+      ) : (
+        <dl aria-label={t('home.kpi.label', 'Key numbers')} className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {loading ? Array.from({ length: 4 }, (_, i) => <div key={i} className="h-20 animate-pulse rounded-lg bg-slate-200/60" />) : stat.map((s) => <Stat key={s.label} {...s} />)}
+        </dl>
+      )}
+
+      {flaggedCount > 0 && (
+        <Block id="focus" offset={offset} open={!!open.focus} onToggle={toggle} title={t('home.focus.title', 'Where to focus first')} summary={t('home.focus.summary', 'Poverty above the national rate, with low access to services or finance.')}>
+          <PriorityTable districts={list} nameOf={nameOf} national={national} onSelect={showOnMap} />
+        </Block>
+      )}
+
+      <Block id="map" offset={offset} open={!!open.map} onToggle={toggle} title={t('home.mapTitle', 'Map by district')} summary={t('home.mapHelp', 'Point at or select a district for details.')}>
+        <div role="group" aria-label={t('map.layerLabel')} className="mb-2 inline-flex gap-1 rounded-md bg-slate-100 p-1">
+          {layers.map((l) => (
+            <button key={l.key} type="button" disabled={!l.enabled} aria-pressed={layer === l.key} title={l.enabled ? undefined : t('map.layerPending')} onClick={() => setLayer(l.key)}
+              className={`rounded px-3 py-1 text-sm disabled:cursor-not-allowed disabled:text-slate-300 ${focus} ${layer === l.key ? 'bg-white font-medium text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'}`}>
+              {l.label}
+            </button>
+          ))}
         </div>
+        <p className="mb-4 text-xs text-slate-500">{layerNote}</p>
 
-        {help && (
-          <ol className="mb-5 list-decimal space-y-1 rounded-lg bg-white p-4 pl-9 text-sm text-slate-600 shadow-sm">
-            <li>{t('home.guide.one', 'The numbers at the top give the big picture.')}</li>
-            <li>{t('home.guide.two', 'Use the Map tab to see where need is highest. Tap a district for details.')}</li>
-            <li>{t('home.guide.three', 'Use Early warnings to see districts that need attention soon, with suggested next steps.')}</li>
-            <li>{t('home.guide.four', 'Use All districts to search, filter and compare every district.')}</li>
-          </ol>
-        )}
-
-        {tab === 'map' && (
-          <section id="panel-map" role="tabpanel" aria-labelledby="tab-map" className={panel}>
-            <div className="mb-4 flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <h2 className="text-lg font-semibold text-slate-900">{t('home.mapTitle', 'Map of Rwanda by district')}</h2>
-                <p className="mt-1 text-sm text-slate-500">{t('home.mapHelp', 'Choose what the colours show. Darker means more need.')}</p>
-              </div>
-              <div role="group" aria-label={t('map.layerLabel')} className="inline-flex flex-wrap gap-1 rounded-lg bg-slate-100 p-1">
-                {layers.map((l) => (
-                  <button
-                    key={l.key}
-                    type="button"
-                    disabled={!l.enabled}
-                    aria-pressed={layer === l.key}
-                    title={l.enabled ? undefined : t('map.layerPending')}
-                    onClick={() => setLayer(l.key)}
-                    className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:text-slate-300 ${focus} ${
-                      layer === l.key ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                  >
-                    {l.label}
-                  </button>
-                ))}
-              </div>
+        {districts.isError ? (
+          <ErrorState title={t('dashboard.error')} detail={districts.error.message} retryLabel={t('dashboard.retry')} onRetry={() => districts.refetch()} />
+        ) : geo.isError ? (
+          <ErrorState title={t('map.error')} detail={t('map.errorHint')} retryLabel={t('dashboard.retry')} onRetry={() => geo.refetch()} />
+        ) : geo.isLoading || districts.isLoading || !geo.data ? (
+          <div className="h-80 animate-pulse rounded-md bg-slate-100" aria-busy="true" aria-label={t('dashboard.loading')} />
+        ) : (
+          <div className="grid gap-6 lg:grid-cols-3">
+            <div className="lg:col-span-2">
+              <RiskMap geo={geo.data} districts={list} layer={layer} lang={lang} activeCode={activeCode} onHover={setHover} onSelect={setSelected} vuln={null} />
             </div>
-
-            <div className="mb-4 space-y-1.5">
-              <Note>{t('home.estimateNote', 'These numbers are careful estimates, not exact counts. A home visit should always confirm a family\u2019s situation.')}</Note>
-              {layer === 'vulnerability' && (
-                <Note>{t('home.vulnNote', 'This view shows families who are poor now or one setback away. It is an early warning to help plan, not a prediction for any single family.')}</Note>
+            <div aria-live="polite" className="space-y-4">
+              {active ? (
+                <div className="rounded-lg border border-slate-200 p-3 text-sm">
+                  <div className="text-base font-semibold text-slate-900">{nameOf(active)}</div>
+                  <div className="text-xs text-slate-500">{active.province}</div>
+                  <dl className="mt-2 divide-y divide-slate-100">
+                    <div className="flex justify-between py-1.5"><dt className="text-slate-500">{t('home.people', 'People')}</dt><dd className="font-medium tabular-nums">{fmt.format(active.population)}</dd></div>
+                    <div className="flex justify-between py-1.5"><dt className="text-slate-500">{t('home.inPovertyPeople', 'In poverty')}</dt><dd className="font-medium tabular-nums">{active.povertyRate != null ? `${active.povertyRate}%` : t('dashboard.pending')}</dd></div>
+                  </dl>
+                  {!picked && <p className="mt-2 text-xs text-slate-500">{t('home.clickMore', 'Select the district for the full profile.')}</p>}
+                </div>
+              ) : (
+                <p className="rounded-lg border border-dashed border-slate-300 p-3 text-sm text-slate-500">{t('home.hint', 'Point at or tap a district to see its details.')}</p>
               )}
+              {picked && <DistrictProfile district={picked} all={list} name={nameOf(picked)} />}
             </div>
-
-            {districts.isError ? (
-              <ErrorState title={t('dashboard.error')} detail={districts.error.message} retryLabel={t('dashboard.retry')} onRetry={() => districts.refetch()} />
-            ) : geo.isError ? (
-              <ErrorState title={t('map.error')} detail={t('map.errorHint')} retryLabel={t('dashboard.retry')} onRetry={() => geo.refetch()} />
-            ) : geo.isLoading || districts.isLoading || !geo.data ? (
-              <div className="h-80 animate-pulse rounded-lg bg-slate-100" aria-busy="true" aria-label={t('dashboard.loading')} />
-            ) : (
-              <div className="grid gap-8 lg:grid-cols-3">
-                <div className="lg:col-span-2">
-                  <RiskMap geo={geo.data} districts={list} layer={layer} lang={lang} activeCode={activeCode} onHover={setHover} onSelect={setSelected} vuln={vuln.byCode} />
-                </div>
-
-                <div className="space-y-6">
-                  <div aria-live="polite" className="min-h-40 rounded-lg bg-slate-50 p-4 text-sm">
-                    {active ? (
-                      <>
-                        <div className="text-base font-semibold text-slate-900">{nameOf(active)}</div>
-                        <div className="text-slate-500">{active.province}</div>
-                        <dl className="mt-3">
-                          {[
-                            [t('home.people', 'People living here'), fmt.format(active.population)],
-                            [t('home.inPoverty', 'Households in poverty'), active.povertyRate !== null && active.povertyRate !== undefined ? `${active.povertyRate}%` : pending],
-                            ...(activeVuln
-                              ? [
-                                  [t('home.closeToPoverty', 'Close to falling into poverty'), `${Math.round(activeVuln.share_at_risk * 100)}%`],
-                                  [t('home.needHelpNow', 'Likely in need now'), `${Math.round(activeVuln.share_poor_now * 100)}%`],
-                                ]
-                              : []),
-                            [t('home.howWeKnow', 'How we know this'), t(`dashboard.source.${active.povertyRateSource}`)],
-                          ].map(([k, v]) => (
-                            <div key={k} className="flex items-baseline justify-between gap-4 border-b border-slate-100 py-2 last:border-0">
-                              <dt className="text-slate-500">{k}</dt>
-                              <dd className="text-right font-medium tabular-nums text-slate-900">{v}</dd>
-                            </div>
-                          ))}
-                        </dl>
-                      </>
-                    ) : (
-                      <p className="text-slate-500">{t('home.hint', 'Point at or tap a district to see its details.')}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <h3 className="mb-2 text-sm font-semibold text-slate-900">{t('home.top5', 'Districts with the most poverty')}</h3>
-                    <ol className="space-y-1">
-                      {sorted.slice(0, 5).map((d, i) => (
-                        <li key={d.code}>
-                          <button type="button" onClick={() => setSelected(d.code)} className={`w-full rounded-md px-2 py-1.5 text-left text-sm hover:bg-slate-50 ${focus}`}>
-                            <span className="flex items-center justify-between">
-                              <span className="text-slate-800"><span className="mr-2 text-slate-400">{i + 1}</span>{nameOf(d)}</span>
-                              <span className="font-medium tabular-nums text-slate-900">{d.povertyRate}%</span>
-                            </span>
-                            <span className="mt-1.5 block h-1 rounded bg-slate-100">
-                              <span className="block h-1 rounded bg-emerald-600" style={{ width: `${((d.povertyRate ?? 0) / maxPoverty) * 100}%` }} />
-                            </span>
-                          </button>
-                        </li>
-                      ))}
-                    </ol>
-                  </div>
-                </div>
-              </div>
-            )}
-            <p className="mt-4 text-xs text-slate-400">{t('map.attribution')}</p>
-          </section>
-        )}
-
-        {tab === 'alerts' && vuln.data && (
-          <div id="panel-alerts" role="tabpanel" aria-labelledby="tab-alerts">
-            <AlertsPanel
-              data={vuln.data}
-              nameFor={(code, fallback) => {
-                const d = list.find((x) => x.code === code)
-                return d ? nameOf(d) : fallback
-              }}
-              onSelect={(code) => showOnMap(code, 'vulnerability')}
-            />
           </div>
         )}
+        <p className="mt-3 text-xs text-slate-400">{t('map.attribution')}</p>
+      </Block>
 
-        {tab === 'districts' && (
-          <section id="panel-districts" role="tabpanel" aria-labelledby="tab-districts" className={panel}>
-            <h2 className="mb-4 text-lg font-semibold text-slate-900">{t('home.allDistricts', 'All districts')}</h2>
-            {districts.isError ? (
-              <ErrorState title={t('dashboard.error')} detail={districts.error.message} retryLabel={t('dashboard.retry')} onRetry={() => districts.refetch()} />
-            ) : districts.isLoading ? (
-              <div className="space-y-2" aria-busy="true" aria-label={t('dashboard.loading')}>
-                {Array.from({ length: 6 }, (_, i) => <div key={i} className="h-10 animate-pulse rounded bg-slate-100" />)}
-              </div>
-            ) : list.length === 0 ? (
-              <p className="text-slate-500">{t('dashboard.noData')}</p>
-            ) : (
-              <DistrictTable districts={list} lang={lang} vulnByCode={vuln.byCode} onSelect={(code) => showOnMap(code)} />
-            )}
-          </section>
-        )}
-      </div>
+      {hasProgress && (
+        <Block id="progress" offset={offset} open={!!open.progress} onToggle={toggle} title={t('progress.title', 'Progress since 2016/17')} summary={t('progress.summary', 'Poverty in every district, then and now.')}>
+          <ProgressChart districts={list} nameOf={nameOf} onSelect={showOnMap} />
+        </Block>
+      )}
+
+      {hasDrivers && (
+        <Block id="drivers" offset={offset} open={!!open.drivers} onToggle={toggle} title={t('drivers.title', 'What is behind poverty')} summary={t('drivers.summary', 'Compare poverty with one indicator at a time. Association, not cause.')}>
+          <DriversChart districts={list} nameOf={nameOf} onSelect={showOnMap} />
+        </Block>
+      )}
+
+      <Block id="districts" offset={offset} open={!!open.districts} onToggle={toggle} title={t('home.allDistricts', 'All districts')} summary={t('home.allDistrictsHelp', 'Search, filter and compare all 30 districts.')}>
+        {districts.isLoading ? <div className="h-24 animate-pulse rounded bg-slate-100" aria-busy="true" /> : list.length === 0 ? <p className="text-slate-500">{t('dashboard.noData')}</p> : <DistrictTable districts={list} lang={lang} vulnByCode={null} onSelect={showOnMap} />}
+      </Block>
+
+      <Block id="sources" offset={offset} open={!!open.sources} onToggle={toggle} title={t('home.sources.title', 'Sources and limits')} summary={t('home.sources.summary', 'Where the numbers come from and how to read them.')}>
+        <ul className="max-w-3xl list-disc space-y-1.5 pl-5 text-sm leading-6 text-slate-700">
+          <li>{t('home.sources.eicv', 'Poverty and living conditions: NISR EICV7 (2023/24) district reports, compared with EICV5 (2016/17).')}</li>
+          <li>{t('home.sources.finscope', 'Financial access: FinScope Rwanda 2024, about 400 adults per district, so districts near a cut-off could fall on either side.')}</li>
+          <li>{t('home.sources.margin', 'District figures are survey estimates with margins of error. Small differences may not be meaningful.')}</li>
+          <li>{t('home.sources.assoc', 'Links between poverty and other indicators show association, not cause.')}</li>
+          <li>{t('home.sources.noHouseholds', 'Published district figures only. No individual household data.')}</li>
+          <li>{t('home.estimateNote', 'These are estimates, not exact counts. A home visit should always confirm a family\u2019s situation.')}</li>
+        </ul>
+      </Block>
     </div>
   )
 }

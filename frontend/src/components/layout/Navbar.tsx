@@ -63,6 +63,9 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* Pages can put a second row of links here (the Dashboard lists its sections). Empty on other pages. */}
+      <div id="header-subnav" />
+
       {open && (
         <nav id="mobile-menu" aria-label={t('nav.main', 'Main navigation')} className="border-t border-slate-200 bg-white px-4 py-2 md:hidden">
           {links.map((l) => (
