@@ -1,0 +1,53 @@
+import { useTranslation } from 'react-i18next'
+import type { District } from '../../types'
+
+const focus = 'focus-visible:outline focus-visible:outline-2 focus-visible:outline-emerald-700'
+
+export default function PriorityTable({
+  districts, nameOf, national, onSelect,
+}: { districts: District[]; nameOf: (d: District) => string; national?: number; onSelect: (code: string) => void }) {
+  const { t } = useTranslation()
+  const rows = districts
+    .filter((d) => d.highPovertyLowAccess || d.doubleExclusionFlag)
+    .sort((a, b) => (b.povertyRate ?? 0) - (a.povertyRate ?? 0))
+  const yes = t('home.focus.yes', 'Yes')
+  const th = 'py-2 pr-4 text-left text-sm font-medium text-slate-600'
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[40rem] border-collapse text-sm">
+        <caption className="sr-only">{t('home.focus.title', 'Where to focus first')}</caption>
+        <thead>
+          <tr className="border-b border-slate-900">
+            <th scope="col" className={th}>{t('table.district', 'District')}</th>
+            <th scope="col" className={`${th} text-right`}>{t('table.poverty', 'Poverty, 2023/24')}</th>
+            <th scope="col" className={`${th} text-right`}>{t('table.change', 'Change since 2016/17')}</th>
+            <th scope="col" className={th}>{t('table.services', 'Low access to services')}</th>
+            <th scope="col" className={th}>{t('table.finance', 'Low financial access')}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((d) => (
+            <tr key={d.code} className="border-b border-slate-200">
+              <th scope="row" className="py-2.5 pr-4 text-left font-normal">
+                <button type="button" onClick={() => onSelect(d.code)} className={`text-left font-medium text-slate-900 underline decoration-slate-300 underline-offset-2 hover:decoration-slate-900 ${focus}`}>
+                  {nameOf(d)}
+                </button>
+                <span className="ml-2 text-xs text-slate-500">{d.province}</span>
+              </th>
+              <td className="py-2.5 pr-4 text-right tabular-nums">
+                {d.povertyRate?.toFixed(1)}%
+                {national != null && d.povertyRate != null && <span className="sr-only">{d.povertyRate > national ? ', above national' : ''}</span>}
+              </td>
+              <td className="py-2.5 pr-4 text-right tabular-nums text-slate-600">
+                {d.povertyChangePoints != null ? `\u2212${Math.abs(d.povertyChangePoints).toFixed(1)} pts` : '\u2013'}
+              </td>
+              <td className="py-2.5 pr-4">{d.highPovertyLowAccess ? yes : <span className="text-slate-400">{'\u2013'}</span>}</td>
+              <td className="py-2.5 pr-4">{d.doubleExclusionFlag ? yes : <span className="text-slate-400">{'\u2013'}</span>}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
