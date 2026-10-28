@@ -37,3 +37,4 @@ app.use((err: { status?: number; message?: string }, _req: Request, res: Respons
 });
 
 app.listen(PORT, () => console.log(`API running on http://localhost:${PORT}`));
+// reload-official-data
