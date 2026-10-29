@@ -25,10 +25,11 @@
     "loading": "Biraje…",
     "retry": "Ongera ugerageze",
     "error": "Ntibishobotse kubona amakuru",
-    "source": {
+        "source": {
       "province_eicv7": "Igipimo cy'intara (EICV7)",
       "microdata": "Amakuru ya EICV7",
-      "modelled": "Igereranya"
+      "modelled": "Igereranya",
+      "official_eicv7": "Imibare yemewe ya NISR (EICV7)"
     }
   },
   "table": {
