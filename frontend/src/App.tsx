@@ -1,4 +1,5 @@
-﻿import ImbaragaAIChatbot from './components/ImbaragaAIChatbot';
+﻿import ImbaragaBilingualEngine from './components/ImbaragaBilingualEngine';
+import ImbaragaAIChatbot from './components/ImbaragaAIChatbot';
 import { Route, Routes } from 'react-router-dom'
 import PageShell from './components/layout/PageShell'
 import Dashboard from './pages/Dashboard'
@@ -16,5 +17,6 @@ function OriginalApp() {
     </PageShell>
   )
 }
-export default function App() { return (<><OriginalApp /><ImbaragaAIChatbot /></>); }
+export default function App() { return (<><OriginalApp /><ImbaragaBilingualEngine /><ImbaragaAIChatbot /></>); }
+
 
