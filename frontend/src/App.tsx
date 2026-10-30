@@ -1,10 +1,11 @@
+﻿import ImbaragaAIChatbot from './components/ImbaragaAIChatbot';
 import { Route, Routes } from 'react-router-dom'
 import PageShell from './components/layout/PageShell'
 import Dashboard from './pages/Dashboard'
 import Targeting from './pages/Targeting'
 import Insights from './pages/Insights'
 
-export default function App() {
+function OriginalApp() {
   return (
     <PageShell>
       <Routes>
@@ -15,3 +16,5 @@ export default function App() {
     </PageShell>
   )
 }
+export default function App() { return (<><OriginalApp /><ImbaragaAIChatbot /></>); }
+
