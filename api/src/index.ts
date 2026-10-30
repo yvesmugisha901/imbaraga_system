@@ -1,4 +1,4 @@
-import "dotenv/config";
+﻿import "dotenv/config";
 import express, { type NextFunction, type Request, type Response } from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -13,7 +13,7 @@ const app = express();
 const PORT = Number(process.env.PORT ?? 4000);
 
 app.use(helmet());
-app.use(cors({ origin: process.env.CORS_ORIGIN ?? "http://localhost:5173", exposedHeaders: ["Content-Disposition"] }));
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: "2mb" }));
 app.use(morgan("dev"));
 
@@ -37,3 +37,4 @@ app.use((err: { status?: number; message?: string }, _req: Request, res: Respons
 });
 
 app.listen(PORT, () => console.log(`API running on http://localhost:${PORT}`));
+

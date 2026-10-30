@@ -1,4 +1,4 @@
-export const API_BASE: string = import.meta.env.VITE_API_URL ?? 'http://localhost:4000'
+﻿export const API_BASE: string = '';
 
 export class ApiError extends Error {
   status: number
