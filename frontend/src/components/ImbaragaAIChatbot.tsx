@@ -463,7 +463,10 @@ export default function ImbaragaAIChatbot() {
   const [input, setInput] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [copiedIdx, setCopiedIdx] = useState<number | null>(null);
+  // Only the conversation lives in state. The welcome card is added at render time
+  // (see allMessages below), so it follows the language without an effect.
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [welcomeTime] = useState(() => new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }));
   const chatEndRef = useRef<HTMLDivElement>(null);
 
   const getWelcomeCard = (rw: boolean): StructuredAIResponse => ({
@@ -494,15 +497,12 @@ export default function ImbaragaAIChatbot() {
       : ["All 30 Districts Ranking", "5 Provinces Summary", "Cyuve Sector", "Village called Kungo"]
   });
 
-  useEffect(() => {
-    setMessages([
-      {
-        sender: "ai",
-        card: getWelcomeCard(isRw),
-        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-      }
-    ]);
-  }, [isRw]);
+  // The welcome card is always the first message and is rebuilt on every render,
+  // so switching language updates it automatically.
+  const allMessages: ChatMessage[] = [
+    { sender: "ai", card: getWelcomeCard(isRw), timestamp: welcomeTime },
+    ...messages
+  ];
 
   useEffect(() => {
     if (windowState === "open" || windowState === "expanded") {
@@ -950,7 +950,7 @@ export default function ImbaragaAIChatbot() {
   };
 
   const downloadTranscript = () => {
-    const lines = messages.map((m) => {
+    const lines = allMessages.map((m) => {
       if (m.sender === "user") return `[USER - ${m.timestamp}]\n${m.userText}\n`;
       const c = m.card!;
       const mText = c.metrics?.map((x) => `  - ${x.label}: ${x.value} (${x.sub || ""})`).join("\n") || "";
@@ -1079,7 +1079,7 @@ export default function ImbaragaAIChatbot() {
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <button
             type="button"
-            onClick={() => setMessages([{ sender: "ai", card: getWelcomeCard(isRw), timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) }])}
+            onClick={() => setMessages([])}
             style={{ background: "rgba(255,255,255,0.18)", border: "none", color: "#FFF", borderRadius: 6, padding: "5px 8px", fontSize: 11.5, cursor: "pointer", fontWeight: 600 }}
             title={isRw ? "Tangira bundi bushya" : "Reset Chat"}
           >
@@ -1151,7 +1151,7 @@ export default function ImbaragaAIChatbot() {
 
       {/* Messages Feed */}
       <div style={{ flex: 1, padding: 14, overflowY: "auto", background: "#F8FAFC", display: "flex", flexDirection: "column", gap: 12 }}>
-        {messages.map((m, idx) => {
+        {allMessages.map((m, idx) => {
           if (m.sender === "user") {
             return (
               <div

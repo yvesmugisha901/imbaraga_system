@@ -1,4 +1,6 @@
-﻿export const API_BASE: string = '';
+// Deployed: VITE_API_URL is set in Vercel (https://imbaraga-system.onrender.com, no trailing slash, no /api).
+// Local dev: not set, so requests go to /api on the Vite dev server, which proxies to http://localhost:4000.
+export const API_BASE: string = (import.meta.env.VITE_API_URL ?? '').replace(/\/+$/, '')
 
 export class ApiError extends Error {
   status: number

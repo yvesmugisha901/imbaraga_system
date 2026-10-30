@@ -20,6 +20,21 @@ interface HouseholdRecord {
   protectiveRw: string;
 }
 
+// One row read from an uploaded CSV / JSON file. Every field is optional
+// because uploaded files can be missing columns.
+interface RawRow {
+  id?: string;
+  district?: string;
+  sector?: string;
+  cell?: string;
+  village?: string;
+  ubudehe?: string;
+  members?: number | string;
+  income?: number | string;
+  assets?: number | string;
+  score?: number | string;
+}
+
 const RWANDA_LOCATIONS = [
   { district: "Rulindo", sector: "Bushoki", cell: "Kayenzi", village: "Giko" },
   { district: "Rulindo", sector: "Tumba", cell: "Tumba", village: "Nyirabirori" },
@@ -52,10 +67,10 @@ export default function TargetingPage() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [downloadStatus, setDownloadStatus] = useState<string>("");
 
-  const buildRecords = (count: number, prefix: string, customRows?: any[]): HouseholdRecord[] => {
+  const buildRecords = (count: number, prefix: string, customRows?: RawRow[]): HouseholdRecord[] => {
     const raw: HouseholdRecord[] = Array.from({ length: count }, (_, i) => {
       const loc = RWANDA_LOCATIONS[i % RWANDA_LOCATIONS.length];
-      const custom = customRows && customRows[i] ? customRows[i] : {};
+      const custom: RawRow = customRows?.[i] ?? {};
       const deterministicSeed = ((i * 73 + 19) % 100) / 100;
       const rawScore = custom.score ? Number(custom.score) : Number((0.18 + deterministicSeed * 0.78).toFixed(3));
       const score = Math.min(0.98, Math.max(0.08, rawScore));
@@ -121,7 +136,7 @@ export default function TargetingPage() {
     const reader = new FileReader();
     reader.onload = (event) => {
       const content = event.target?.result as string;
-      let customRows: any[] = [];
+      let customRows: RawRow[] = [];
       let count = 120;
 
       try {
@@ -137,7 +152,7 @@ export default function TargetingPage() {
             const headers = lines[0].split(/[,;\t]/).map((h) => h.trim().toLowerCase());
             customRows = lines.slice(1).map((line, idx) => {
               const cols = line.split(/[,;\t]/).map((c) => c.trim());
-              const rowObj: any = { id: `ROW-${1001 + idx}` };
+              const rowObj: RawRow = { id: `ROW-${1001 + idx}` };
               headers.forEach((h, cIdx) => {
                 if (h.includes("id") || h.includes("household")) rowObj.id = cols[cIdx] || rowObj.id;
                 if (h.includes("district") || h.includes("akarere")) rowObj.district = cols[cIdx];
