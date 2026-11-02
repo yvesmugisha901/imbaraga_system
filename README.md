@@ -1,3 +1,10 @@
+﻿## 🎥 Project Demonstration (3-Minute Pitch & System Walkthrough)
+
+▶️ **[Click here to watch/download the 3-minute Imbaraga System Demo Video (.webm)](https://github.com/yvesmugisha901/imbaraga_system/raw/main/imbaraga-demo.webm)**
+
+<video src="https://github.com/yvesmugisha901/imbaraga_system/raw/main/imbaraga-demo.webm" controls="controls" width="100%"></video>
+
+---
 # Imbaraga
 
 **Seeing poverty before the next survey.**
@@ -51,7 +58,7 @@ Rwanda measures poverty through periodic household surveys (EICV, roughly every 
 | # | Sub-problem | What it means | Imbaraga feature |
 |---|---|---|---|
 | P1 | Stale targeting | Ubudehe categories and VUP lists do not reflect recent shocks such as job loss, crop failure or illness | Household risk scoring |
-| P2 | Double exclusion | Households with no mobile money, savings or credit in high-poverty districts are hit hardest and recover slowest | Poverty × financial-access map |
+| P2 | Double exclusion | Households with no mobile money, savings or credit in high-poverty districts are hit hardest and recover slowest | Poverty Ã— financial-access map |
 | P3 | No early warning | Districts react after statistics are published | District dashboard and insights |
 | P4 | No transparency in ranking | Officers cannot see why a household is flagged | Plain-language explanations (English and Kinyarwanda) |
 
@@ -101,23 +108,23 @@ Imbaraga is built in stages. This table is the honest picture as of `v0.1.0`.
 Three tiers. The React frontend talks only to the Express API. Express owns the database, validation and CSV handling, and (once the ML service exists) calls it over REST.
 
 ```
-┌──────────────────────────────────────────┐
-│  React + TypeScript (Vite)               │
-│  Dashboard • Targeting • Insights        │
-│  EN/RW toggle • district map             │
-└──────────────────┬───────────────────────┘
-                   │ REST / JSON (HTTPS)
-┌──────────────────▼───────────────────────┐
-│  Node.js + Express API                   │
-│  /api/health /api/districts /api/kpis    │
-│  validation (zod) • CSV • caching        │
-└─────────┬────────────────────┬───────────┘
-          │ SQL                │ REST (planned)
-┌─────────▼──────────┐  ┌──────▼─────────────────┐
-│ SQLite             │  │ Python ML service      │
-│ (better-sqlite3)   │  │ FastAPI • XGBoost      │
-│ districts, scores  │  │ SHAP explanations      │
-└────────────────────┘  └────────────────────────┘
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  React + TypeScript (Vite)               â”‚
+â”‚  Dashboard â€¢ Targeting â€¢ Insights        â”‚
+â”‚  EN/RW toggle â€¢ district map             â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+                   â”‚ REST / JSON (HTTPS)
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚  Node.js + Express API                   â”‚
+â”‚  /api/health /api/districts /api/kpis    â”‚
+â”‚  validation (zod) â€¢ CSV â€¢ caching        â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
+          â”‚ SQL                â”‚ REST (planned)
+â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
+â”‚ SQLite             â”‚  â”‚ Python ML service      â”‚
+â”‚ (better-sqlite3)   â”‚  â”‚ FastAPI â€¢ XGBoost      â”‚
+â”‚ districts, scores  â”‚  â”‚ SHAP explanations      â”‚
+â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
 ```
 
 **Request flow for "Score" in the Targeting page**
@@ -147,30 +154,30 @@ See `api/package.json` and `frontend/package.json` for exact versions.
 
 ```
 imbaraga_system/
-├── README.md
-├── CHANGELOG.md
-├── CONTRIBUTING.md
-├── .github/                      CI workflow, pull request template
-├── data/
-│   └── processed/
-│       ├── district_aggregates.csv
-│       └── district_estimates.csv   official EICV7 district figures
-├── api/                          Node + Express + TypeScript
-│   ├── package.json
-│   └── src/
-│       ├── index.ts              server entry
-│       ├── routes/               districts.ts and other routes
-│       ├── services/             mockScorer.ts, explanations.ts
-│       ├── db/                   schema.sql, seed.ts, connection
-│       └── shared/
-│           └── explanations.json  driver sentences (EN/RW)
-└── frontend/                     React + Vite
-    ├── vercel.json               single-page-app rewrite
-    ├── public/
-    │   └── rwanda_districts.geojson
-    └── src/
-        ├── api/                  client.ts, hooks.ts
-        └── components/dashboard/
+â”œâ”€â”€ README.md
+â”œâ”€â”€ CHANGELOG.md
+â”œâ”€â”€ CONTRIBUTING.md
+â”œâ”€â”€ .github/                      CI workflow, pull request template
+â”œâ”€â”€ data/
+â”‚   â””â”€â”€ processed/
+â”‚       â”œâ”€â”€ district_aggregates.csv
+â”‚       â””â”€â”€ district_estimates.csv   official EICV7 district figures
+â”œâ”€â”€ api/                          Node + Express + TypeScript
+â”‚   â”œâ”€â”€ package.json
+â”‚   â””â”€â”€ src/
+â”‚       â”œâ”€â”€ index.ts              server entry
+â”‚       â”œâ”€â”€ routes/               districts.ts and other routes
+â”‚       â”œâ”€â”€ services/             mockScorer.ts, explanations.ts
+â”‚       â”œâ”€â”€ db/                   schema.sql, seed.ts, connection
+â”‚       â””â”€â”€ shared/
+â”‚           â””â”€â”€ explanations.json  driver sentences (EN/RW)
+â””â”€â”€ frontend/                     React + Vite
+    â”œâ”€â”€ vercel.json               single-page-app rewrite
+    â”œâ”€â”€ public/
+    â”‚   â””â”€â”€ rwanda_districts.geojson
+    â””â”€â”€ src/
+        â”œâ”€â”€ api/                  client.ts, hooks.ts
+        â””â”€â”€ components/dashboard/
 ```
 
 ## 7. Data sources
@@ -275,7 +282,7 @@ Base path: `/api`. Responses are JSON. Failures return `{ "error": { "code", "me
 | GET | `/api/insights/drivers` | Global feature importance |
 | GET | `/api/insights/metrics` | Model metrics (baseline and XGBoost) |
 | GET | `/api/insights/fairness` | Flag rate and average risk by group |
-| GET | `/api/insights/scatter` | Risk × financial-access points per district |
+| GET | `/api/insights/scatter` | Risk Ã— financial-access points per district |
 
 Conventions: HTTP 400 for validation errors, 503 if the ML service is down, 2 MB request limit, CORS restricted to the frontend origin.
 
@@ -290,7 +297,7 @@ land_size_ha, asset_index, has_electricity, improved_water, has_mobile_money,
 has_savings, has_credit
 ```
 
-Optional: shock flags (job loss, crop failure, illness). Missing optional values are filled with training medians. Errors are reported per row, for example `Row 14: ubudehe_category must be 1–4`.
+Optional: shock flags (job loss, crop failure, illness). Missing optional values are filled with training medians. Errors are reported per row, for example `Row 14: ubudehe_category must be 1â€“4`.
 
 ## 11. Database
 
@@ -333,9 +340,9 @@ SQLite, created by `api/src/db/schema.sql` and filled by `api/src/db/seed.ts`. I
 7. Explain with SHAP TreeExplainer: top three drivers per household and a global importance chart.
 8. Export `model.joblib`, `feature_schema.json`, `metrics.json`.
 
-**Risk levels** (thresholds are tunable): Low < 0.33, Medium 0.33–0.66, High > 0.66.
+**Risk levels** (thresholds are tunable): Low < 0.33, Medium 0.33â€“0.66, High > 0.66.
 
-**Targets for the MVP:** AUC ≥ 0.80 and accuracy ≥ 75% on a held-out set. Report whatever the real numbers are, honestly.
+**Targets for the MVP:** AUC â‰¥ 0.80 and accuracy â‰¥ 75% on a held-out set. Report whatever the real numbers are, honestly.
 
 **Explanations.** Each feature has a bilingual sentence for "raises risk" and "lowers risk", stored in `api/src/shared/explanations.json` and shared by the ML and API layers. Show the three features with the largest positive SHAP value as red chips, and optionally one protective factor as a green chip.
 
@@ -395,7 +402,7 @@ Then test `/api/health` (JSON) and `/api/districts` (30 districts, Nyamagabe at 
 
 1. Set **Root Directory** to `frontend`.
 2. Add `VITE_API_URL` = `https://imbaraga-system.onrender.com` for **Production** and **Preview**. No trailing slash, no `/api`.
-3. **Redeploy** (Deployments, then the `⋯` menu on the latest Production deployment, then Redeploy, with the build cache unticked). Vite writes the variable into the build, so changing it alone does nothing.
+3. **Redeploy** (Deployments, then the `â‹¯` menu on the latest Production deployment, then Redeploy, with the build cache unticked). Vite writes the variable into the build, so changing it alone does nothing.
 4. Keep `frontend/vercel.json` so refreshing `/targeting` and `/insights` works:
 
 ```json
@@ -511,3 +518,4 @@ Planned, not built. Stated as future work, not as current features.
 ---
 
 *Estimates support planning. A person should confirm every household before any decision is made.*
+
