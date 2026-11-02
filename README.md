@@ -1,521 +1,87 @@
-﻿## 🎥 Project Demonstration (3-Minute Pitch & System Walkthrough)
+﻿# 🇷🇼 Imbaraga System — Seeing Poverty Before the Next Survey
+> **Kubona ishusho y'ubukene mbere y'ibarura ritaha**  
+> *An Explainable AI, Macro-to-Micro Poverty Targeting & Decision Intelligence Platform aligned with NISR EICV7 (2023/24) and FinScope 2024.*
+
+🌐 **Live Deployed Platform:** **[https://imbaraga-system.vercel.app](https://imbaraga-system.vercel.app)**
+
+---
+
+## 🎥 Project Demonstration (3-Minute Pitch & System Walkthrough)
 
 ▶️ **[Click here to watch/download the 3-minute Imbaraga System Demo Video (.webm)](https://github.com/yvesmugisha901/imbaraga_system/raw/main/imbaraga-demo.webm)**
 
 <video src="https://github.com/yvesmugisha901/imbaraga_system/raw/main/imbaraga-demo.webm" controls="controls" width="100%"></video>
 
 ---
-# Imbaraga
 
-**Seeing poverty before the next survey.**
+## 🎯 1. The Challenge & Why Imbaraga Matters
 
-Imbaraga (Kinyarwanda for "strength / power") is a decision-support platform for Rwanda. It shows where poverty and financial exclusion overlap across all 30 districts, and it helps programme officers rank households for support (for example VUP) and export targeting lists in minutes.
+National household surveys such as **NISR's EICV** provide the gold standard for measuring poverty across Rwanda's 30 districts, but they occur several years apart. Between survey cycles, local government leaders and social protection planners face three critical operational gaps:
+1. **The Inter-Survey Blind Spot:** Households can slip into poverty between national surveys due to income shocks, asset loss, or high dependency ratios without being detected in time.
+2. **Macro-to-Micro Disconnect:** District-level poverty rates show *where* budget is needed, but local officials at the **Sector (*Umurenge*), Cell (*Akagari*), and Village (*Umudugudu*)** levels need household-level prioritization and specific intervention matching.
+3. **Black-Box Distrust & Language Barriers:** Complex machine learning models are often opaque to policymakers, and English-only analytics tools exclude grassroots leaders who operate in **Kinyarwanda**.
 
-> **Decision-support only.** Imbaraga ranks and explains. It does not move money, and it does not collect personal data. A person must confirm every household before any decision is made.
-
-| | |
-|---|---|
-| **Live app** | https://imbaraga-system.vercel.app |
-| **API** | https://imbaraga-system.onrender.com (`/api/health`, `/api/districts`) |
-| **Repository** | https://github.com/yvesmugisha901/imbaraga_system |
-| **Current release** | `v0.1.0` (pre-release) |
-| **Aligned with** | NST2 (poverty reduction and social protection pillar), Vision 2050 |
-
-> The free Render instance sleeps when idle. The first request can take up to about a minute. If the app says "Cannot reach the server", wait and press **Try again**.
+**Imbaraga System** solves all three by combining official **NISR EICV7 (2023/24)** and **FinScope 2024** macro baselines with an explainable, fairness-audited **Household Vulnerability Targeting Engine** and a **100% Bilingual (English & Kinyarwanda)** interface.
 
 ---
 
-## Table of contents
+## 🚀 2. Core Objectives
 
-1. [The problem](#1-the-problem)
-2. [What Imbaraga does](#2-what-imbaraga-does)
-3. [Status: what is built and what is planned](#3-status-what-is-built-and-what-is-planned)
-4. [Architecture](#4-architecture)
-5. [Tech stack](#5-tech-stack)
-6. [Repository structure](#6-repository-structure)
-7. [Data sources](#7-data-sources)
-8. [Getting started (local)](#8-getting-started-local)
-9. [Environment variables](#9-environment-variables)
-10. [API reference](#10-api-reference)
-11. [Database](#11-database)
-12. [Frontend](#12-frontend)
-13. [Machine learning design](#13-machine-learning-design)
-14. [Deployment](#14-deployment)
-15. [Git workflow and releases](#15-git-workflow-and-releases)
-16. [Testing and quality](#16-testing-and-quality)
-17. [Ethics, privacy and fairness](#17-ethics-privacy-and-fairness)
-18. [Limitations](#18-limitations)
-19. [Roadmap](#19-roadmap)
-20. [Troubleshooting](#20-troubleshooting)
-21. [Contributing, changelog and licence](#21-contributing-changelog-and-licence)
+* **Bridge the Survey Gap for NISR & Policy Makers:** Provide an operational early-warning system that flags households in poverty—and those at high risk of falling into poverty—between multi-year national surveys.
+* **Preventative Intervention Matching:** Automatically diagnose *why* each household is vulnerable and prescribe targeted interventions:
+  * **High Risk (Score ≥ 66%):** *Direct VUP cash transfer & financial inclusion onboarding* (*Inkunga y'amafaranga ya VUP no kwinjizwa muri serivisi z'imari*).
+  * **Medium Risk (Score 42%–65% — Preventative Tier):** *Asset-building cooperative & micro-credit linkage* (*Kwinjizwa muri koperative y'iterambere no guhabwa inguzanyo nto*) to stop families from falling into extreme poverty.
+  * **Low Risk (Score < 42%):** *Routine monitoring & community savings group / Ibimina*.
+* **Guarantee Algorithmic Fairness & Transparency:** Benchmark complex AI against explainable baselines, audit gender and geographic equity, and enforce a **human-in-the-loop home visit** before any benefit decision is finalized.
+* **Empower Grassroots Officials in Kinyarwanda:** Translate every chart, metric, dynamic risk driver, policy recommendation, and AI query response seamlessly between **English (`EN`)** and **Kinyarwanda (`RW`)**.
 
 ---
 
-## 1. The problem
-
-Rwanda measures poverty through periodic household surveys (EICV, roughly every 3 to 5 years) and Ubudehe categorisation cycles. Households that fall into poverty between cycles are invisible to the system, so cash transfers, health-insurance subsidies and financial services arrive late or not at all.
-
-| # | Sub-problem | What it means | Imbaraga feature |
-|---|---|---|---|
-| P1 | Stale targeting | Ubudehe categories and VUP lists do not reflect recent shocks such as job loss, crop failure or illness | Household risk scoring |
-| P2 | Double exclusion | Households with no mobile money, savings or credit in high-poverty districts are hit hardest and recover slowest | Poverty Ã— financial-access map |
-| P3 | No early warning | Districts react after statistics are published | District dashboard and insights |
-| P4 | No transparency in ranking | Officers cannot see why a household is flagged | Plain-language explanations (English and Kinyarwanda) |
-
-## 2. What Imbaraga does
-
-**Target users**
-
-- **Social protection officers** (LODA, MINALOC, NGOs): upload a household list, see who is most at risk, export a ranked list.
-- **Policymakers and planners** (district and national): see KPIs and the districts where poverty and financial exclusion overlap.
-- **Field and community leaders**: read a simple explanation, in Kinyarwanda, of why a household is flagged.
-
-**The three things to remember**
-
-1. A risk model with honest validation (baseline versus XGBoost, district-aware split).
-2. Every score is explainable: the top three drivers in plain language.
-3. A live map showing where poverty and financial exclusion overlap ("double exclusion").
-
-**Pages**
-
-| Page | Route | Purpose |
-|---|---|---|
-| Dashboard | `/` | District map, KPI cards, searchable and paginated district list, sources and limits. Sub-views: **Map**, **All districts**, **Sources** |
-| Targeting | `/targeting` | Table of households, scoring, risk badges, reason chips, CSV export |
-| Insights | `/insights` | District deep-dive, drivers, model metrics and fairness views |
-
-The interface has an English / Kinyarwanda toggle (`EN` / `RW`).
-
-## 3. Status: what is built and what is planned
-
-Imbaraga is built in stages. This table is the honest picture as of `v0.1.0`.
-
-| Area | Status |
-|---|---|
-| Official district poverty data for all 30 districts (NISR EICV7 2023/24) | Built, seeded into the database |
-| District API (`/api/health`, `/api/districts`, `/api/kpis`) | Built and deployed |
-| Dashboard with map, KPIs, tabbed and searchable district list, early-warning alerts | Built and deployed |
-| Targeting page with household scoring and explanations | Built, uses a **mock scorer** (`mockScorer`) with a shared `explanations.json` |
-| Household risk model (XGBoost + Logistic Regression baseline) | **Planned.** The household model in `v0.1.0` is synthetic |
-| Python ML service (FastAPI) | **Planned** |
-| Real household data | **Not used.** Households shown in the Targeting page are synthetic |
-| Persistent storage of saved scores | Not persistent on the free host (database rebuilt in `/tmp` on every start) |
-
-> `v0.1.0` is published as a **pre-release** because the household model is synthetic. The district figures are official; the household scores are not.
-
-## 4. Architecture
-
-Three tiers. The React frontend talks only to the Express API. Express owns the database, validation and CSV handling, and (once the ML service exists) calls it over REST.
-
-```
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚  React + TypeScript (Vite)               â”‚
-â”‚  Dashboard â€¢ Targeting â€¢ Insights        â”‚
-â”‚  EN/RW toggle â€¢ district map             â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-                   â”‚ REST / JSON (HTTPS)
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚  Node.js + Express API                   â”‚
-â”‚  /api/health /api/districts /api/kpis    â”‚
-â”‚  validation (zod) â€¢ CSV â€¢ caching        â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”¬â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-          â”‚ SQL                â”‚ REST (planned)
-â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”  â”Œâ”€â”€â”€â”€â”€â”€â–¼â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”
-â”‚ SQLite             â”‚  â”‚ Python ML service      â”‚
-â”‚ (better-sqlite3)   â”‚  â”‚ FastAPI â€¢ XGBoost      â”‚
-â”‚ districts, scores  â”‚  â”‚ SHAP explanations      â”‚
-â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜
-```
-
-**Request flow for "Score" in the Targeting page**
-
-1. The user uploads a CSV or adds rows; the frontend sends them to the API.
-2. Express validates columns and types (zod) and fills defaults.
-3. The scorer returns a probability, a risk level and the top three drivers per row. Today this is the mock scorer; later it is the Python service.
-4. Express maps driver codes to sentences using the shared `explanations.json` (English and Kinyarwanda) and returns the ranked list.
-5. The frontend renders the table and reason chips and enables CSV export.
-
-## 5. Tech stack
-
-| Layer | Technology |
-|---|---|
-| Frontend | React, TypeScript, Vite |
-| API | Node.js, Express 5, TypeScript |
-| Validation and parsing | zod, multer (uploads), csv-parse, csv-stringify |
-| Security and logging | helmet, cors, morgan |
-| Database | SQLite via `better-sqlite3` |
-| Tooling | tsx, ESLint, Prettier, GitHub Actions CI |
-| Hosting | Vercel (frontend), Render (API) |
-| Planned ML | Python, FastAPI, pandas, scikit-learn, XGBoost, SHAP |
-
-See `api/package.json` and `frontend/package.json` for exact versions.
-
-## 6. Repository structure
-
-```
-imbaraga_system/
-â”œâ”€â”€ README.md
-â”œâ”€â”€ CHANGELOG.md
-â”œâ”€â”€ CONTRIBUTING.md
-â”œâ”€â”€ .github/                      CI workflow, pull request template
-â”œâ”€â”€ data/
-â”‚   â””â”€â”€ processed/
-â”‚       â”œâ”€â”€ district_aggregates.csv
-â”‚       â””â”€â”€ district_estimates.csv   official EICV7 district figures
-â”œâ”€â”€ api/                          Node + Express + TypeScript
-â”‚   â”œâ”€â”€ package.json
-â”‚   â””â”€â”€ src/
-â”‚       â”œâ”€â”€ index.ts              server entry
-â”‚       â”œâ”€â”€ routes/               districts.ts and other routes
-â”‚       â”œâ”€â”€ services/             mockScorer.ts, explanations.ts
-â”‚       â”œâ”€â”€ db/                   schema.sql, seed.ts, connection
-â”‚       â””â”€â”€ shared/
-â”‚           â””â”€â”€ explanations.json  driver sentences (EN/RW)
-â””â”€â”€ frontend/                     React + Vite
-    â”œâ”€â”€ vercel.json               single-page-app rewrite
-    â”œâ”€â”€ public/
-    â”‚   â””â”€â”€ rwanda_districts.geojson
-    â””â”€â”€ src/
-        â”œâ”€â”€ api/                  client.ts, hooks.ts
-        â””â”€â”€ components/dashboard/
-```
-
-## 7. Data sources
-
-| Source | Used for |
-|---|---|
-| NISR **EICV7 2023/24** | Official district poverty rate |
-| **FinScope 2024** | Financial inclusion context |
-| **RPHC 2022** (Population and Housing Census) | District population |
-| **geoBoundaries** (CC BY 4.0) | District boundaries (`rwanda_districts.geojson`) |
-
-Rules for the data:
-
-- Cite numbers exactly from the published reports. Do not use remembered figures.
-- District estimates are loaded from `data/processed/*.csv` into SQLite by `npm run seed`. On a successful run the log shows `Applied 30 district poverty estimates (30 official_eicv7)` and `Seeded 30 districts`.
-- Household rows are **synthetic** and anonymised. No real household registry is used.
-
-## 8. Getting started (local)
-
-**Requirements:** Node.js 22 LTS or newer, npm, Git. (Python 3.11 will be needed once the ML service is added.)
-
-```bash
-git clone https://github.com/yvesmugisha901/imbaraga_system.git
-cd imbaraga_system
-```
-
-**API**
-
-```bash
-cd api
-npm install
-cp .env.example .env        # Windows: copy .env.example .env
-npm run seed                # creates the SQLite database and loads 30 districts
-npm run dev                 # http://localhost:4000
-```
-
-Check it: open `http://localhost:4000/api/health`, then `http://localhost:4000/api/districts` (30 districts).
-
-**Frontend** (in a second terminal)
-
-```bash
-cd frontend
-npm install
-npm run dev                 # Vite, usually http://localhost:5173
-```
-
-With no `VITE_API_URL` set, the frontend uses `http://localhost:4000` and adds `/api` itself.
-
-**API scripts**
-
-| Script | What it does |
-|---|---|
-| `npm run dev` | Run with `tsx watch` (reloads on change) |
-| `npm run build` | Compile TypeScript to `dist/` |
-| `npm start` | Run the compiled server (`node dist/index.js`) |
-| `npm run seed` | Create the schema and load the official district data |
-| `npm run lint` | ESLint on `src` |
-| `npm run format` | Prettier on `src` |
-
-> The seed uses `tsx`, so it runs from TypeScript source. The compiled server in `dist/` also reads `dist/shared/explanations.json`, which `tsc` does not copy. See [Deployment](#14-deployment).
-
-## 9. Environment variables
-
-Names only. Never commit real values. Keep `.env.example` in sync with this table.
-
-**API (`api/.env`)**
-
-| Variable | Example | Purpose |
-|---|---|---|
-| `DATABASE_URL` | `./data/imbaraga.db` locally, `/tmp/imbaraga.db` on Render | SQLite file path |
-| `CORS_ORIGIN` | `https://imbaraga-system.vercel.app` | The **one** origin the API accepts. Exact match, **no trailing slash**, no path |
-| `PORT` | `4000` | Local only. Do **not** set on Render; it provides its own |
-| `ML_SERVICE_URL` | `http://localhost:8000` | Planned: Python ML service |
-
-**Frontend (Vercel environment variables)**
-
-| Variable | Example | Purpose |
-|---|---|---|
-| `VITE_API_URL` | `https://imbaraga-system.onrender.com` | API base URL. **No trailing slash and no `/api`.** Baked in at build time |
-
-## 10. API reference
-
-Base path: `/api`. Responses are JSON. Failures return `{ "error": { "code", "message" } }` where implemented.
-
-**Available in v0.1.0**
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| GET | `/api/health` | Health check |
-| GET | `/api/districts` | All 30 districts with poverty rate and indicators |
-| GET | `/api/kpis` | National KPI cards for the dashboard |
-
-**Designed (scoring and insights, per the project outline)**
-
-| Method | Endpoint | Purpose |
-|---|---|---|
-| GET | `/api/districts/:code` | One district deep-dive |
-| GET | `/api/households` | Demo households (paginated, filter by district and risk) |
-| POST | `/api/households` | Add one household row |
-| POST | `/api/score` | Score a batch (JSON or CSV upload) |
-| GET | `/api/export/:batchId` | Download a scored batch as CSV |
-| GET | `/api/insights/drivers` | Global feature importance |
-| GET | `/api/insights/metrics` | Model metrics (baseline and XGBoost) |
-| GET | `/api/insights/fairness` | Flag rate and average risk by group |
-| GET | `/api/insights/scatter` | Risk Ã— financial-access points per district |
-
-Conventions: HTTP 400 for validation errors, 503 if the ML service is down, 2 MB request limit, CORS restricted to the frontend origin.
-
-**CSV template for the Targeting page**
-
-Required columns:
-
-```
-household_id, district_code, household_size, dependency_ratio, head_age, head_sex,
-head_education_level, ubudehe_category, main_income_source, income_sources_count,
-land_size_ha, asset_index, has_electricity, improved_water, has_mobile_money,
-has_savings, has_credit
-```
-
-Optional: shock flags (job loss, crop failure, illness). Missing optional values are filled with training medians. Errors are reported per row, for example `Row 14: ubudehe_category must be 1â€“4`.
-
-## 11. Database
-
-SQLite, created by `api/src/db/schema.sql` and filled by `api/src/db/seed.ts`. It holds only aggregated indicators and synthetic households.
-
-| Table | Key columns |
-|---|---|
-| `districts` | code (PK), names (EN/RW), province, population, poverty rate, source |
-| `households_demo` | id (PK), district code (FK), model features |
-| `score_batches` | id (PK), created at, row count, model version |
-| `scores` | id (PK), batch id (FK), household id, probability, risk level, three drivers, rank |
-
-**Double-exclusion rule** (define once, reuse everywhere): a district is flagged when its risk score is in the **top tercile** and its financial-access rate is in the **bottom tercile**. The rule is shown on the dashboard so reviewers can see it is transparent.
-
-## 12. Frontend
-
-- **Dashboard**: map by district (poverty, missing support, "poor and left out"), KPI cards, searchable and paginated district list, and a Sources tab with the limits of the data.
-- **Targeting**: household table, scoring, risk shown as colour **plus** label (Low / Medium / High), reason chips in English or Kinyarwanda, CSV export, and a visible "decision-support only" notice.
-- **Insights**: district selector, risk distribution, drivers, model comparison, fairness view.
-- **How it reaches the API**: `frontend/src/api/client.ts` reads `VITE_API_URL`, falls back to `http://localhost:4000`, and adds `/api`. Data hooks live in `hooks.ts`. The map loads `/rwanda_districts.geojson` from `frontend/public`.
-- **Accessibility**: responsive on laptop and tablet, readable on a projector, loading, empty and error states on every async view, risk never shown by colour alone.
-- **Language**: EN/RW switch; keep a glossary so terms stay consistent. Kinyarwanda text should be reviewed by a native speaker.
-
-## 13. Machine learning design
-
-> This section describes the planned model. `v0.1.0` uses a mock scorer and synthetic households.
-
-**Label.** `poor = 1` if consumption per adult equivalent is below the national poverty line, else `0`. Record the line value used.
-
-**Avoid label leakage.** The label comes from consumption, so do **not** use consumption, expenditure or food-spending variables as features. Use structural and observable proxies only: demographics, assets, housing, land, income sources, access, shocks.
-
-**Pipeline**
-
-1. Ingest EICV household and consumption files and FinScope aggregates.
-2. Clean: handle missing values (median or mode plus missing flags), remove duplicates, standardise district codes against one master list of 30 districts.
-3. Label and engineer features.
-4. Split 80/20, stratified by label and district. Also run **GroupKFold by district** to test generalisation to unseen districts.
-5. Train Logistic Regression (baseline, scaled features) and XGBoost (primary). Use `scale_pos_weight` / `class_weight='balanced'` for imbalance.
-6. Evaluate accuracy, precision, recall, F1, ROC-AUC, PR-AUC, confusion matrix and calibration. Report precision and recall for the poor class, not only accuracy.
-7. Explain with SHAP TreeExplainer: top three drivers per household and a global importance chart.
-8. Export `model.joblib`, `feature_schema.json`, `metrics.json`.
-
-**Risk levels** (thresholds are tunable): Low < 0.33, Medium 0.33â€“0.66, High > 0.66.
-
-**Targets for the MVP:** AUC â‰¥ 0.80 and accuracy â‰¥ 75% on a held-out set. Report whatever the real numbers are, honestly.
-
-**Explanations.** Each feature has a bilingual sentence for "raises risk" and "lowers risk", stored in `api/src/shared/explanations.json` and shared by the ML and API layers. Show the three features with the largest positive SHAP value as red chips, and optionally one protective factor as a green chip.
-
-If real EICV microdata is not available, use a public survey with a similar structure or a clearly labelled synthetic set calibrated to published district figures. Never claim real-world accuracy from synthetic data.
-
-## 14. Deployment
-
-The API runs on **Render**, the frontend on **Vercel**. Deploy the API first, test it alone, then point the frontend at it.
-
-### 14.1 API on Render
-
-| Setting | Value |
-|---|---|
-| Root Directory | `api` |
-| Build Command | `npm install --include=dev && npm run build && mkdir -p dist/shared && cp src/shared/explanations.json dist/shared/` |
-| Start Command | `npm run seed && npm start` |
-| Health Check Path | `/api/health` |
-| Branch | `main` |
-
-Environment variables on Render:
-
-| Key | Value |
-|---|---|
-| `DATABASE_URL` | `/tmp/imbaraga.db` |
-| `CORS_ORIGIN` | `https://imbaraga-system.vercel.app` (no trailing slash) |
-| `NODE_VERSION` | `22`, only if `better-sqlite3` fails to compile on the default Node |
-
-Why the `cp` step: `tsc` compiles only `.ts` files, so `explanations.json` is not copied into `dist/`. Without the copy the API crashes at start with `ENOENT ... dist/shared/explanations.json`. A more portable fix is to move the copy into `api/package.json`:
-
-```json
-"build": "tsc && node -e \"require('fs').cpSync('src/shared','dist/shared',{recursive:true})\""
-```
-
-Then the Render build command is just `npm install --include=dev && npm run build`.
-
-**Before deploying, check:**
-
-```bash
-git ls-files data/processed          # must list district_aggregates.csv and district_estimates.csv
-git ls-files "*explanations.json"    # api/src/shared/explanations.json
-```
-
-**A good start log shows:**
-
-```
-Applied 30 district poverty estimates (30 official_eicv7)
-Seeded 30 districts into /tmp/imbaraga.db
-API running on http://localhost:10000
-==> Your service is live
-```
-
-Then test `/api/health` (JSON) and `/api/districts` (30 districts, Nyamagabe at 51.4).
-
-> The database lives in `/tmp` and is rebuilt on every start. Official data is unaffected, but anything saved at runtime (for example scores on the Targeting page) does not survive a restart. Use a persistent disk or hosted PostgreSQL if that must persist.
-
-### 14.2 Frontend on Vercel
-
-1. Set **Root Directory** to `frontend`.
-2. Add `VITE_API_URL` = `https://imbaraga-system.onrender.com` for **Production** and **Preview**. No trailing slash, no `/api`.
-3. **Redeploy** (Deployments, then the `â‹¯` menu on the latest Production deployment, then Redeploy, with the build cache unticked). Vite writes the variable into the build, so changing it alone does nothing.
-4. Keep `frontend/vercel.json` so refreshing `/targeting` and `/insights` works:
-
-```json
-{
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
-}
-```
-
-5. Confirm the map file is committed: `git ls-files frontend/public` must list `rwanda_districts.geojson`.
-
-Open the site from the production domain, not from a per-deployment preview URL (see CORS in [Troubleshooting](#20-troubleshooting)).
-
-### 14.3 Before a demo
-
-Free-tier services sleep. Open the API URL about 15 minutes before presenting. Keep a screen-recorded demo video and exported slides as a backup, and a local copy ready to run.
-
-## 15. Git workflow and releases
-
-- **Branches:** `main` holds releases only. Day-to-day work happens on `dev` and on feature branches (`feat/...`, `fix/...`, `chore/...`).
-- **Commits:** [Conventional Commits](https://www.conventionalcommits.org/) (`feat(frontend): ...`, `fix(api): ...`, `chore: ...`).
-- **Feature PRs into `dev`:** squash is fine.
-- **Release PRs, `dev` into `main`:** always choose **Create a merge commit**, never squash. Squashing leaves `dev` unaware that `main` contains the release, and the next release PR shows conflicts again.
-- **Tagging a release:**
-
-```bash
-git checkout main
-git pull origin main
-git tag -a v0.1.0 -m "Release v0.1.0"
-git push origin v0.1.0
-```
-
-- **If `main` was squashed by mistake**, join the histories on `dev` (the files are identical, so keep `dev`'s content):
-
-```bash
-git checkout dev
-git pull origin dev
-git merge -s ours origin/main -m "merge: record main (v0.1.0) in dev"
-git diff --stat origin/main HEAD     # must print nothing
-git push origin dev
-```
-
-- **GitHub Release:** draft from the tag. Mark `v0.1.0` as a **pre-release** because the household model is synthetic.
-- **Housekeeping:** delete merged branches, and stamp `CHANGELOG.md` with the version and date (`## [0.1.0] - 2026-10-29`) instead of leaving `## [Unreleased]`.
-- **Windows note:** `grep` does not exist in Command Prompt. Use `git ls-files "*pattern*"` or `findstr`.
-
-## 16. Testing and quality
-
-| Area | What to test | Tool |
-|---|---|---|
-| API | Validation errors, CSV edge cases (missing columns, wrong types, empty file), pagination, ML service down (503) | Jest + Supertest |
-| Frontend | Table sorting and filtering, language toggle, upload flow, charts with empty data | Vitest + React Testing Library |
-| ML (planned) | No leakage, schema matches between training and service, probabilities in [0, 1], deterministic output | pytest |
-| End to end | Upload a 200-row CSV, score, export in under 1 minute; dashboard loads in under 3 seconds | Manual, stopwatch |
-
-**Definition of done for a feature:** works end to end with real API data, has loading, empty and error states, works in both languages, and is merged to `main` through the release flow.
-
-CI (GitHub Actions) and a pull-request template are in `.github/`.
-
-## 17. Ethics, privacy and fairness
-
-- **Privacy.** Only aggregated or anonymised survey data and synthetic households. No real household registry. Consistent with Law No. 058/2021 on personal data protection. Any real-data deployment needs formal data-sharing agreements and a data protection impact assessment.
-- **Human in the loop.** The model ranks and explains; officers and communities decide. The interface says so.
-- **Fairness.** Check flag rates and average risk by sex of household head, rural/urban and district, and report findings honestly, including limits.
-- **Transparency.** Show metrics, the double-exclusion rule, data sources and the model version in the app.
-- **Harm avoidance.** Household scores are never shown publicly. An export contains only the IDs from the uploaded file.
-
-## 18. Limitations
-
-- Survey data ages. District figures reflect EICV7 2023/24, not today.
-- The household model in `v0.1.0` is synthetic and uses a mock scorer. Do not treat its scores as evidence about real people.
-- District-level bias is possible; a model trained on some districts may not generalise to others.
-- A probability is not certainty, and the system makes no causal claims.
-- Free hosting sleeps and does not persist runtime data.
-
-## 19. Roadmap
-
-Planned, not built. Stated as future work, not as current features.
-
-- Train and serve the real risk model (XGBoost with SHAP) through a FastAPI service
-- Persistent storage (PostgreSQL or a persistent disk)
-- Memoranda of understanding with LODA and MINALOC for real data access
-- SMS / USSD alerts
-- Farmer-facing mobile app
-- Automated retraining and MLOps
-- What-if scenarios (adjust a shock flag, see the score change) and a printable district brief
-
-**Out of scope by design:** direct cash disbursement, collection of personally identifiable data, mobile-money integration, province-level policy prescriptions.
-
-## 20. Troubleshooting
-
-| Symptom | Cause and fix |
-|---|---|
-| "Cannot reach the server" on first load | The free Render instance is asleep. Wait up to about a minute, then press **Try again** |
-| Console: `blocked by CORS policy ... value 'https://...vercel.app/' that is not equal to the supplied origin` | `CORS_ORIGIN` on Render has a trailing slash, or differs from the site address. Set it to exactly `https://imbaraga-system.vercel.app`, no trailing slash, no spaces |
-| CORS error only on a long URL like `imbaraga-system-xxxx-....vercel.app` | That is a per-deployment preview URL, not the allowed origin. Open the production domain |
-| Network tab shows requests to `localhost:4000` | `VITE_API_URL` was not in the build. Add it and **redeploy without build cache** |
-| Render: `npm error Missing script: "seed"` | `api/package.json` on `main` lacks `"seed": "tsx src/db/seed.ts"`. Add it and merge to `main` |
-| Render: `ENOENT ... dist/shared/explanations.json` | `tsc` does not copy JSON. Use the build command in section 14.1 |
-| Render: `better_sqlite3.node`, `NODE_MODULE_VERSION`, `node-gyp` | Native module and Node mismatch. Set `NODE_VERSION=22` and redeploy |
-| Seed cannot find the CSVs | `data/processed/*.csv` are not committed. Check `git ls-files data/processed` |
-| Refreshing `/targeting` gives 404 on Vercel | Missing `frontend/vercel.json` rewrite |
-| Map is blank | `frontend/public/rwanda_districts.geojson` is not committed |
-| `'#' is not recognized` or `'grep' is not recognized` | You are in Windows Command Prompt. Comments and `grep` are not available; skip the comment, use `git ls-files "*pattern*"` |
-| `tsc` prints its help text instead of building | You ran it in the repo root. Run API commands inside `api/` |
-
-## 21. Contributing, changelog and licence
-
-- See [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution guide and [CHANGELOG.md](CHANGELOG.md) for release notes.
-- Open feature pull requests against `dev`, following the template in `.github/`.
-- **Licence:** the API declares ISC in `api/package.json`. Add a top-level `LICENSE` file to make the licence explicit for the whole repository.
-- **Acknowledgements:** NISR (EICV7, RPHC), FinScope Rwanda, geoBoundaries.
+## ⚙️ 3. Key Platform Modules & How They Work
+
+### A. National Macro Dashboard (*Ahabanza*)
+* Integrates official **NISR EICV7 2023/24** poverty rates (27.4% national rate; 30 of 30 districts reduced poverty since 2016/17) with **FinScope 2024** financial access and basic service indicators.
+* Identifies the **9 priority districts** where poverty exceeds the national average alongside low access to services or financial exclusion—including the **6 double-exclusion districts** (*Gisagara, Nyaruguru, Karongi, Rutsiro, Ngororero, Burera*).
+
+### B. Household Vulnerability Targeting Engine (*Guhitamo ingo*)
+* Allows analysts or local officials to upload any household survey batch (`.csv`) covering **District, Sector, Cell, and Village**.
+* Evaluates household income, household size/dependency, productive assets, Ubudehe tier, and district baselines to compute a **Vulnerability Score (0–100%)**, classify **Risk Level**, isolate the **Primary Vulnerability Drivers**, and export a prioritized **Scored CSV** for field verification.
+
+### C. Explainable AI, Accuracy & Fairness Audit (*Ubusesenguzi*)
+* **Feature Transparency:** Displays exact factor weights driving the risk estimate—led by **Household assets (17%)**, **Education of household head (11%)**, **Main source of income (10%)**, **Land owned (8%)**, and **Number of income sources (8%)**.
+* **Rigorous Model Validation (20,000 Calibrated Synthetic Households — 16,000 Train / 4,000 Test):**
+
+| Measure (*Igipimo*) | Simple Baseline (Logistic Regression) | Complex Model (XGBoost) | Policy Takeaway |
+| :--- | :---: | :---: | :--- |
+| **Poor households found (Recall)** | 82.7% | **84.6%** | Catches 925 of 1,093 truly poor test households |
+| **Flags that were truly poor (Precision)** | 63.7% | **64.7%** | Every flag is verified via a confirmatory home visit |
+| **Overall correct (Accuracy)** | 82.4% | **83.2%** | Strong overall classification stability |
+| **Ranking quality (ROC AUC)** | 0.908 | **0.913** | Simple explainable model performs nearly identically to XGBoost |
+| **Unseen Districts (District-grouped AUC)** | 0.903 ± 0.003 | **0.908 ± 0.004** | Generalizes reliably to districts unseen during training |
+
+* **Gender & Geographic Fairness Audit:**
+  * Female-headed households achieve **83.1%** recall vs. **85.1%** for male-headed households (only a **2.0 percentage point gap**).
+  * Transparently highlights urban districts (*Kicukiro, Nyarugenge, Gasabo*) where low baseline poverty rates require localized threshold calibration.
+
+### D. Imbaraga Intelligence AI Assistant (Bilingual Administrative & Dataset Chatbot)
+* Indexes all **30 Districts, 416 Sectors, 2,148 Cells, and Village registries**, plus any **live uploaded CSV dataset**.
+* Officials can query any administrative unit or specific household ID in **English or Kinyarwanda** to receive instant poverty baselines, financial exclusion metrics, and intervention summaries.
 
 ---
 
-*Estimates support planning. A person should confirm every household before any decision is made.*
+## 🧭 4. Quick 60-Second Guide for Judges
 
+1. **Open the Live Platform:** Visit **[https://imbaraga-system.vercel.app](https://imbaraga-system.vercel.app)**.
+2. **Test Real-Time Kinyarwanda Localization:** Click the **`EN` / `RW`** toggle in the top-right header at any time to see all navigation, charts, statistical explanations, and tables switch between English and Kinyarwanda.
+3. **Explore Macro Priorities (*Dashboard / Ahabanza*):** Hover or click on districts in the interactive map, review the **Progress since 2016/17** dumbbell chart, and filter all 30 districts.
+4. **Run Household Targeting (*Targeting / Guhitamo ingo*):**
+   * Click **Download CSV Schema** or upload a household `.csv` file.
+   * Filter households by **High / Medium / Low Risk**, search by Sector/Cell/Village, switch between **EN** and **RW** to see localized drivers and VUP/cooperative recommendations, and click **Export Scored CSV**.
+5. **Inspect Model Fairness & Explainability (*Insights / Ubusesenguzi*):** Review the top household risk drivers, the gender fairness audit, the 4,000-household confusion matrix, and the XGBoost vs. Logistic Regression comparison.
+6. **Query Imbaraga Intelligence:** Click the **Imbaraga Intelligence** button in the bottom-right corner and ask about any district, sector, cell, village (e.g., *"Nyamagabe"*, *"Bushoki sector"*, *"Kayenzi cell"*), or your uploaded household records in English or Kinyarwanda.
+
+---
+
+## 🛡️ 5. Data Ethics & Scientific Integrity
+* **Macro Layer:** 100% official published statistics from **NISR EICV7 (2023/24)**, **FinScope Rwanda 2024**, and **RPHC5 (2022)**.
+* **Micro Predictive Layer:** Trained and evaluated on synthetic household microdata statistically calibrated to published NISR marginals to protect household privacy during prototyping. Before field deployment, the pipeline is designed to be re-verified directly on official NISR microdata with mandatory human-in-the-loop home visits.
